@@ -1,7 +1,7 @@
 {
   "name": "finance-flow",
   "version": "0.1.0",
-  "homepage": "https://Wenying0808.github.io/finance-flow}",
+  "homepage": "https://Wenying0808.github.io/finance-flow",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.4",
