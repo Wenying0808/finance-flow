@@ -1,0 +1,63 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+
+.account{
+    width: 100%;
+}
+
+.account-content{
+    
+    margin-top: 30px;
+    display: flex;
+    width: 100%;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    
+
+}
+
+.account-login-info{
+    
+    display: flex;
+    padding: 8px 24px;
+    width: 100%;
+    
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    
+    align-self: stretch;
+}
+
+.account-login-info-name{
+    width: 100%;
+    overflow: hidden;
+    color: var(--Black, #000);
+    text-align: center;
+    text-overflow: ellipsis;
+    font-family: "Open Sans";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 16.8px */
+}
+.account-login-info-email{
+    width: 100%;
+    overflow: hidden;
+    color: var(--Manatee, #97999C);
+    text-align: center;
+    text-overflow: ellipsis;
+    font-family: "Open Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 14.4px */
+}

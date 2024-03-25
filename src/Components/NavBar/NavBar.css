@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+.navbar{
+    display: flex;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+
+
+    border-top: 1px solid var(--RoyalBlue, #4758DC);
+}
+
+.navbar-tab{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    color: var(--Thundora, #404040);
+
+    cursor: pointer;
+}
+
+span{
+    font-family: "Open Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 100%; /* 12px */
+}
+
+.navbar-tab:hover{
+    color: var(--RoyalBlue, #4758DC);
+}
+
+.navbar-tab.selected{
+    color: var(--RoyalBlue, #4758DC);
+}
+

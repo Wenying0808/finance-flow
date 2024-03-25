@@ -1,0 +1,22 @@
+export const Currencies = [
+    { value: 'AUD', label: 'AUD (A$)', symbol: 'A$'},
+    { value: 'BRL', label: 'BRL (R$)', symbol: 'R$'},
+    { value: 'CAD', label: 'CAD (C$)', symbol: 'C$'},
+    { value: 'CHF', label: 'CHF (Fr)', symbol: 'Fr'},
+    { value: 'CNY', label: 'CNY (元)', symbol: 'CN$'},
+    { value: 'EUR', label: 'EUR (€)', symbol: '€'},
+    { value: 'GBP', label: 'GBP (£)', symbol: '£'},
+    { value: 'HKD', label: 'HKD (HK$)', symbol: 'HK$'},
+    { value: 'INR', label: 'INR (₹)', symbol: '₹'},
+    { value: 'JPY', label: 'JPY (¥)', symbol: '¥'},
+    { value: 'KRW', label: 'KRW (₩)', symbol: '₩'},
+    { value: 'MXN', label: 'MXN (Mex$)', symbol: 'Mex$'},
+    { value: 'NOK', label: 'NOK (kr)', symbol: 'kr'},
+    { value: 'NZD', label: 'NZD (NZ$)', symbol: 'NZ$'},
+    { value: 'RUB', label: 'RUB (₽)', symbol: '₽'},
+    { value: 'SEK', label: 'SEK (kr)', symbol: 'Kr'},
+    { value: 'SGD', label: 'SGD (S$)', symbol: 'S$'},
+    { value: 'TRY', label: 'TRY (₺)', symbol: '₺'},
+    { value: 'USD', label: 'USD ($)', symbol: '$'},
+    { value: 'ZAR', label: 'ZAR (R)', symbol: 'R'}
+  ];
