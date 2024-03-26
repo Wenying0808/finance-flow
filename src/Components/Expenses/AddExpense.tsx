@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { TextField, Select, MenuItem, Button, FormControl, InputLabel, InputAdornment} from '@mui/material';
+import { TextField, Select, MenuItem, Button, FormControl, InputLabel, InputAdornment, IconButton} from '@mui/material';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Categories } from "./Categories";
@@ -8,6 +8,7 @@ import { SelectChangeEvent } from "@mui/material";
 import './AddExpense.css';
 import { Expense } from "./ExpenseInterface";
 import { v4 as uuidv4 } from 'uuid';
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 
 interface AddExpensePageProps {
@@ -72,7 +73,12 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({currencySymbol, onSave, 
 
     return (
         <div className="add-expense-container">
-            <div className="page-header">Add Expense</div>
+            <div className="page-header">
+                <div className="page-header-title">Add Expense</div>
+                <IconButton  sx={{ color:"#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"} }} onClick={onCancel}>
+                    <IoIosCloseCircleOutline />
+                </IconButton>
+            </div>
             <div className="add-expense-form" >
 
                 <FormControl sx={{ width: '180px' }}>   
@@ -126,8 +132,8 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({currencySymbol, onSave, 
                 
             </div>
             <div className="add-expense-buttons">
-                <Button variant="contained" onClick={onCancel}>Discard</Button>
-                <Button variant="contained" onClick={handleSave} disabled={!isSaveEnabled}>Save</Button>
+                <Button variant="outlined" sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} onClick={onCancel}>Cancel</Button>
+                <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave} disabled={!isSaveEnabled}>Save</Button>
             </div>
             
 

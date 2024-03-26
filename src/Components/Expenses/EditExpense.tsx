@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { TextField, Select, MenuItem, Button, FormControl, InputLabel, InputAdornment, SelectChangeEvent} from '@mui/material';
+import { TextField, Select, MenuItem, Button, FormControl, InputLabel, InputAdornment, SelectChangeEvent, IconButton} from '@mui/material';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Categories } from "./Categories";
-
+import { RiDeleteBinLine } from "react-icons/ri";
 import './EditExpense.css';
 import { Expense } from "./ExpenseInterface";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 
 interface EditExpensePageProps {
@@ -70,7 +71,12 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ currencySymbol, expen
 
     return (
         <div className="edit-expense-container">
-            <div className="page-header">Edit Expense</div>
+            <div className="page-header">
+                <div className="page-header-title">Edit Expense</div>
+                <IconButton  sx={{ color:"#4758DC" ,'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)" }}} onClick={onCancel}>
+                    <IoIosCloseCircleOutline />
+                </IconButton>
+            </div>
             <form className="edit-expense-form" onSubmit={handleSubmitForm} >
 
                 <FormControl sx={{ width: '180px' }}>   
@@ -128,9 +134,9 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ currencySymbol, expen
                 
             </form>
             <div className="edit-expense-buttons">
-                <Button variant="contained" color="error" onClick={handleDeleteClick}>Delete</Button>
-                <Button variant="outlined" onClick={onCancel}>Cancel</Button>
-                <Button variant="contained" type='submit' disabled ={!expense} onClick={handleSubmitForm}>Save</Button>
+                <Button variant="contained" color="error" startIcon={<RiDeleteBinLine />} onClick={handleDeleteClick}>Delete</Button>
+                <Button variant="outlined" sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} onClick={onCancel}>Cancel</Button>
+                <Button variant="contained" type='submit' sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} disabled ={!expense} onClick={handleSubmitForm}>Save</Button>
             </div>
             
 

@@ -1,13 +1,24 @@
 .page-header{
+    display: flex;
     width: 100%;
     padding: 16px 24px;
     color: var(--Black, #000);
+
+    justify-content: space-between;
+    align-items: center;    
+    
+    border-bottom: 1px solid var(--RoyalBlue, #4758DC);
+}
+.page-header-title{
+    flex: 1 0 0;
+    padding-left: 40px;
+
     text-align: center;
     font-family: "Open Sans";
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
-    line-height: 120%; /* 21.6px */
+    line-height: 22px; 
 }
 
 .add-expense-container{

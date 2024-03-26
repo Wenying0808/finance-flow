@@ -9,24 +9,21 @@ interface SettingsProps {
   currency: string;
   setCurrency: React.Dispatch<React.SetStateAction<string>>;
 
-  startDate: number;
-  setStartDate: React.Dispatch<React.SetStateAction<number>>;
-
   budget: number;
   setBudget: React.Dispatch<React.SetStateAction<number>>;
 
   currencySymbol: string;
 }
 
-const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, startDate, setStartDate, budget, setBudget, currencySymbol }) => {
+const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setBudget, currencySymbol }) => {
 
   const handleCurrencyChange = (e: SelectChangeEvent<string>) => {
     setCurrency(e.target.value as string);
   }
 
-  const handleStartDateChange = (e: SelectChangeEvent<number>) => {
+  /*const handleStartDateChange = (e: SelectChangeEvent<number>) => {
     setStartDate(e.target.value as number);
-  }
+  }*/
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBudget(Number(e.target.value));
@@ -56,8 +53,6 @@ const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, startDate, s
     dates.push({ value: i, label });
   }
 
-
-
   return (
     
     <div className="settings-content">
@@ -70,7 +65,7 @@ const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, startDate, s
         </Select>
       </FormControl>
         
-      <FormControl sx={{ width: '180px' }}>
+      {/*<FormControl sx={{ width: '180px' }}>
         <InputLabel id="starting-date">Starting Date of Month</InputLabel>
         <Select labelId="starting-date" id="starting-date" value={startDate} onChange={handleStartDateChange} >
           {dates.map((dateOption) => (
@@ -78,6 +73,7 @@ const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, startDate, s
           ))}
         </Select>
       </FormControl>
+          */}
      
 
       <TextField 
@@ -95,12 +91,7 @@ const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, startDate, s
 
         required/>
 
-      
-  
-     
-
     </div>
-
   );
 };
 
