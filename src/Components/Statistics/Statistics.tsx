@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import './Statistics.css';
-import { Button, Modal } from '@mui/material';
+import { Button, IconButton, Modal } from '@mui/material';
 import { Expense } from '../Expenses/ExpenseInterface';
 import AddExpensePage from '../Expenses/AddExpense';
 import EditExpensePage from '../Expenses/EditExpense';
@@ -9,11 +9,12 @@ import { MdFastfood  } from "react-icons/md";
 import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
 import { BsSuitcaseFill } from "react-icons/bs";
 import { IconType } from 'react-icons';
+import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 
 
 interface StatisticsProps {
   currency: string;
-  startDate: number;
+  //startDate: number;
   budget: number;
   currencySymbol: string;
   onDeleteExpense: (expenseId: string) => void;
@@ -33,7 +34,7 @@ const categoryIconMap: CategoryIconMap = {
   'Transportation': FaTrain,
 };
 
-const Statistics: React.FC<StatisticsProps> = ({currency, startDate, budget, currencySymbol, onDeleteExpense}) => {
+const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol, onDeleteExpense}) => {
 
   
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
@@ -141,9 +142,13 @@ const Statistics: React.FC<StatisticsProps> = ({currency, startDate, budget, cur
   return (
     <div className="statsitcs-content">
       <div className="month-control">
-        <Button onClick={handlePreviousMonth}>Prev</Button>
-        <span>{dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}</span>
-        <Button onClick={handleNextMonth}>Next</Button>
+        <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="previous month" onClick={handlePreviousMonth}>
+          <GrFormPreviousLink />
+        </IconButton>
+        <span className="month-control-header">{dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}</span>
+        <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="next month" onClick={handleNextMonth}>
+          <GrFormNextLink />
+        </IconButton>
       </div>
       <div className="summary">
         <div className="summary-info">
@@ -173,7 +178,7 @@ const Statistics: React.FC<StatisticsProps> = ({currency, startDate, budget, cur
             ))}
         </div>
         <div className="summary-log-button">
-          <Button variant="contained" onClick={handleOpenModal}>Add Expense</Button>
+          <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleOpenModal}>Add Expense</Button>
         </div>
       </div>
       <Modal

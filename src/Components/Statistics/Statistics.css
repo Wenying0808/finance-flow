@@ -26,9 +26,18 @@
     border-bottom: 1px solid var(--RoyalBlue, #4758DC);
 }
 
+.month-control-header{
+    color: var(--Black, #000);
+    font-family: "Open Sans";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 21.6px */
+}
+
 .summary{
     position: fixed;
-    top: 70px;
+    top: 73px;
     display: flex;
     width: 100%;
     padding: var(--Button-Padding-LR-Large, 16px);
@@ -79,7 +88,7 @@
 .summary-log-list{
 
     position: absolute;
-    top: 170px;
+    top: 173px;
     left: 0;
     bottom: 73px; 
     
@@ -103,7 +112,7 @@
     cursor: pointer;
 }
 .log-card:hover{
-    background: var(--Zumtho, #E1EBFF);
+    background: rgba(71, 88, 220, 0.1);
 }
 
 .log-card-date{
