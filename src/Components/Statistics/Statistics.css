@@ -7,7 +7,7 @@
 .statsitcs-content{
     display: flex;
     width: 100%;
-    height: calc(100% - 72px);
+    height: 100%;
     
     flex-direction: column;
     align-items: center;
