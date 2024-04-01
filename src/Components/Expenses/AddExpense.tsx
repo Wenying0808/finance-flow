@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, InputAdornment, IconButton} from '@mui/material';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -24,38 +24,40 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({currencySymbol, onSave, 
     const [amount, setAmount] = useState<number>(0);
     const [date, setDate] = useState<string>('');
     const [isSaveEnabled, setIsSaveEnabled] = useState<boolean>(false);
-
-    
-
-    //check if all inputs have value (not empty)
-    const checkInputValidility = () => {
-        return description.trim() !== '' && category.trim() !== '' && amount > 0 && date !== '';
-    }
-
+   
     //handle input changes
     const handleDateChange = (newDate: string | null) => {
         if (newDate) {
             setDate(newDate);
-            setIsSaveEnabled(checkInputValidility());
-            console.log(newDate, typeof newDate);
-            console.log(date, typeof date);
         }
     }
 
     const handleCategoryChange = (e: SelectChangeEvent) => {
         setCategory(e.target.value as string);
-        setIsSaveEnabled(checkInputValidility());
     }
 
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(e.target.value as string);
-        setIsSaveEnabled(checkInputValidility());
     }
     
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(Number(e.target.value));
-        setIsSaveEnabled(checkInputValidility());
+        setAmount(Number(e.target.value)); 
     }
+
+     //check if all inputs have value (not empty)
+    const useCheckInputValidity = (description: string, category: string, amount: number, date: string) => {
+        return useCallback(() => {
+          return description.trim() !== '' && category.trim() !== '' && amount > 0 && date !== '';
+        }, [description, category, amount, date]);
+      };
+    const isInputValid = useCheckInputValidity(description, category, amount, date);
+
+    //address async updates from the inputs
+    useEffect(() => {
+        setIsSaveEnabled(isInputValid);
+    },[isInputValid]);
+
+   
 
     const handleSave = () => {
         const expense: Expense = {
