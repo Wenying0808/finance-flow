@@ -3,6 +3,7 @@ import './Settings.css';
 import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
+import { useUserContext } from '../../Contexts/UserContextProvider';
 
 
 interface SettingsProps {
@@ -18,6 +19,10 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setBudget, currencySymbol, onSave }) => {
+  
+  //access uid from context
+  const {uid} = useUserContext();
+
   const [newCurrency, setNewCurrency] = useState(currency);
   const [newBudget, setNewBudget] = useState(budget);
 
@@ -63,7 +68,7 @@ const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setB
         required/>
       
       <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>
-
+      <div>uid:{uid}</div>
     </form>
   );
 };

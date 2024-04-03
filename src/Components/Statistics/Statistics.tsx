@@ -10,6 +10,7 @@ import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
 import { BsSuitcaseFill } from "react-icons/bs";
 import { IconType } from 'react-icons';
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
+import { useUserContext } from '../../Contexts/UserContextProvider';
 
 
 interface StatisticsProps {
@@ -35,6 +36,9 @@ const categoryIconMap: CategoryIconMap = {
 };
 
 const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol, onDeleteExpense}) => {
+
+  //access uid from context
+  const {uid} = useUserContext();
 
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -187,6 +191,7 @@ const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol
         </div>
         <div className="summary-log-button">
           <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleOpenModal}>Add Expense</Button>
+          <div>uid:{uid}</div>
         </div>
       </div>
       <Modal

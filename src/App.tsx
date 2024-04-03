@@ -6,7 +6,7 @@ import Statistics from './Components/Statistics/Statistics';
 import './App.css';
 import { Tab } from './Components/NavBar/Tab';
 import { Currencies } from './Components/Expenses/Currencies';
-
+import UserContextProvider from './Contexts/UserContextProvider';
 
 const App: React.FC = () => {
   
@@ -46,17 +46,15 @@ const App: React.FC = () => {
     }
   }, [currency])
 
- 
-
   return (
-      
-      <div className="App">
-        <div className="app-content">
-        {renderTabContent()}
-        </div> 
-        <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-      </div>
-
+      <UserContextProvider>
+        <div className="App">
+          <div className="app-content">
+          {renderTabContent()}
+          </div> 
+          <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        </div>
+      </UserContextProvider>
   );
 }
 
