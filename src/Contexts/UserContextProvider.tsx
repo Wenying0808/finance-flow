@@ -17,20 +17,43 @@ export const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 export const auth = app.auth();
 
-
 interface UserContextProps {
     children: ReactNode;
 };
 
-const UserContext = createContext<any>(null);
+interface UserContextType {
+    uid: string | null;
+    setUid: React.Dispatch<React.SetStateAction<string | null>>;
+    currency: string;
+    setCurrency: React.Dispatch<React.SetStateAction<string>>;
+    budget: number;
+    setBudget: React.Dispatch<React.SetStateAction<number>>;
+    currencySymbol: string;
+    setCurrencySymbol: React.Dispatch<React.SetStateAction<string>>;
+}
 
+const defaultUserContext: UserContextType = {
+    uid: null,
+    setUid: () => {},
+    currency: 'EUR',
+    setCurrency: () => {},
+    budget: 1000, 
+    setBudget: () => {},
+    currencySymbol: '€',
+    setCurrencySymbol: () => {},
+};
+
+const UserContext = createContext<any>(null);
 export const useUserContext = () => useContext(UserContext);
 
 const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {
     const [uid, setUid] = useState<string | null>(null);
+    const [currency, setCurrency] = useState<string>('EUR');
+    const [budget, setBudget] = useState<number>(1000);
+    const [currencySymbol, setCurrencySymbol] = useState<string>('€');
 
     return(
-        <UserContext.Provider value={{ uid, setUid, auth}}>
+        <UserContext.Provider value={{ uid, setUid, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, auth}}>
             {children}
         </UserContext.Provider>
     );

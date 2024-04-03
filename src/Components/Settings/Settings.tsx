@@ -7,24 +7,15 @@ import { useUserContext } from '../../Contexts/UserContextProvider';
 
 
 interface SettingsProps {
-  currency: string;
-  setCurrency: React.Dispatch<React.SetStateAction<string>>;
-
-  budget: number;
-  setBudget: React.Dispatch<React.SetStateAction<number>>;
-
-  currencySymbol: string;
-
-  onSave: (currency: string, budget: number) => void;
+  onSave: (newCurrency: string, newBudget: number) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setBudget, currencySymbol, onSave }) => {
+const Settings: React.FC<SettingsProps> = ({ onSave }) => {
   
   //access uid from context
-  const {uid} = useUserContext();
-
-  const [newCurrency, setNewCurrency] = useState(currency);
-  const [newBudget, setNewBudget] = useState(budget);
+  const {uid, currency, setCurrency, budget, setBudget, currencySymbol} = useUserContext();
+  const [newCurrency, setNewCurrency] = useState<string>(currency);
+  const [newBudget, setNewBudget] = useState<number>(budget);
 
   const handleCurrencyChange = (e: SelectChangeEvent<string>) => {
     setNewCurrency(e.target.value as string);

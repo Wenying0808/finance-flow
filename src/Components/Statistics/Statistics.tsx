@@ -14,10 +14,6 @@ import { useUserContext } from '../../Contexts/UserContextProvider';
 
 
 interface StatisticsProps {
-  currency: string;
-  //startDate: number;
-  budget: number;
-  currencySymbol: string;
   onDeleteExpense: (expenseId: string) => void;
 }
 
@@ -35,10 +31,10 @@ const categoryIconMap: CategoryIconMap = {
   'Transportation': FaTrain,
 };
 
-const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol, onDeleteExpense}) => {
+const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense}) => {
 
   //access uid from context
-  const {uid} = useUserContext();
+  const {uid, currencySymbol, budget} = useUserContext();
 
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [modalOpen, setModalOpen] = useState<boolean>(false);

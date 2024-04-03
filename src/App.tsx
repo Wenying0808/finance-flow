@@ -6,14 +6,12 @@ import Statistics from './Components/Statistics/Statistics';
 import './App.css';
 import { Tab } from './Components/NavBar/Tab';
 import { Currencies } from './Components/Expenses/Currencies';
-import UserContextProvider from './Contexts/UserContextProvider';
+import {useUserContext } from './Contexts/UserContextProvider';
 
 const App: React.FC = () => {
-  
+  const { currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol } = useUserContext();
+
   const [currentTab, setCurrentTab] = React.useState<Tab>(Tab.ACCOUNT);
-  const [currency, setCurrency] = React.useState<string>('EUR');
-  const [budget, setBudget] = React.useState<number>(1000);
-  const [currencySymbol, setCurrencySymbol] = React.useState<string>('€');
 
   const renderTabContent = () => {
     switch(currentTab){
@@ -21,18 +19,13 @@ const App: React.FC = () => {
         return <Account/>;
       case Tab.SETTINGS:
         return <Settings 
-                  currency ={currency} 
-                  setCurrency={setCurrency} 
-                  budget={budget} 
-                  setBudget={setBudget} 
-                  currencySymbol={currencySymbol}
                   onSave={(newCurrency, newBudget) => {
                     setCurrency(newCurrency);
                     setBudget(newBudget);
                   }}
               />;
       case Tab.STATISTICS:
-        return <Statistics currency={currency} budget={budget} currencySymbol={currencySymbol} onDeleteExpense={function (expenseId: string): void {
+        return <Statistics onDeleteExpense={function (expenseId: string): void {
           throw new Error('Function not implemented.');
         } }/>;
     }
@@ -44,22 +37,22 @@ const App: React.FC = () => {
     if (selectedCurrency) {
       setCurrencySymbol(selectedCurrency.symbol);
     }
-  }, [currency])
+  }, [currency, setCurrencySymbol])
 
   return (
-      <UserContextProvider>
+      
         <div className="App">
           <div className="app-content">
           {renderTabContent()}
           </div> 
           <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
         </div>
-      </UserContextProvider>
+      
   );
 }
 
 export default App;
-function useSate<T>() {
-  throw new Error('Function not implemented.');
-}
+
+
+
 
