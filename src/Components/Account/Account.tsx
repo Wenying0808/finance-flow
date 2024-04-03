@@ -8,25 +8,8 @@ import validator from 'validator';
 import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
 
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDWajFmlQ1rtmLEqrDxq5ytF6w2hktj_fc",
-    authDomain: "finance-flow-ebfc3.firebaseapp.com",
-    projectId: "finance-flow-ebfc3",
-    storageBucket: "finance-flow-ebfc3.appspot.com",
-    messagingSenderId: "532090806268",
-    appId: "1:532090806268:web:886f032786f846be11dc79",
-    measurementId: "G-9KNBRJQFLR"
-  };
-
-
-// Check if Firebase is not already initialized
-const app = firebase.initializeApp(firebaseConfig);
-const auth = app.auth();
-
-
 const Account: React.FC = () => {
-    const { uid, setUid } = useUserContext();
+    const { uid, setUid, auth } = useUserContext();
 
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
@@ -97,23 +80,24 @@ const Account: React.FC = () => {
     };
 
     //function to handle sign in 
-    const handleSignIn = async () : Promise<void> => {
+    const handleSignIn = async (): Promise<void> => {
         try {
-            // Sign in with email and password using Firebase
-            await auth.signInWithEmailAndPassword(email, password);
+             // Sign in with email and password
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+
             // Update signedIn state to true
             setSignedIn(true);
+
+            //session storage 
             sessionStorage.setItem('signedIn', 'true');
             sessionStorage.setItem('userName', userName);
             sessionStorage.setItem('email', email);
 
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             if (userCredential.user && userCredential.user.uid){
                 setUid(userCredential.user.uid);
-            } else{
+            } else {
                 setUid(null);
             }
-            console.log(uid);
 
           } catch (error: any) {
             setSignInErrorMessage("Invalid email or password")
