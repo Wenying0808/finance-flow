@@ -12,7 +12,6 @@ const App: React.FC = () => {
   
   const [currentTab, setCurrentTab] = React.useState<Tab>(Tab.ACCOUNT);
   const [currency, setCurrency] = React.useState<string>('EUR');
-  //const [startDate, setStartDate] = React.useState<number>(1);
   const [budget, setBudget] = React.useState<number>(1000);
   const [currencySymbol, setCurrencySymbol] = React.useState<string>('€');
 
@@ -21,7 +20,17 @@ const App: React.FC = () => {
       case Tab.ACCOUNT:
         return <Account/>;
       case Tab.SETTINGS:
-        return <Settings currency ={currency} setCurrency={setCurrency} budget={budget} setBudget={setBudget} currencySymbol={currencySymbol}/>;
+        return <Settings 
+                  currency ={currency} 
+                  setCurrency={setCurrency} 
+                  budget={budget} 
+                  setBudget={setBudget} 
+                  currencySymbol={currencySymbol}
+                  onSave={(newCurrency, newBudget) => {
+                    setCurrency(newCurrency);
+                    setBudget(newBudget);
+                  }}
+              />;
       case Tab.STATISTICS:
         return <Statistics currency={currency} budget={budget} currencySymbol={currencySymbol} onDeleteExpense={function (expenseId: string): void {
           throw new Error('Function not implemented.');
@@ -37,18 +46,22 @@ const App: React.FC = () => {
     }
   }, [currency])
 
+ 
+
   return (
-    
+      
       <div className="App">
         <div className="app-content">
         {renderTabContent()}
-        </div>
-        
+        </div> 
         <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
       </div>
 
-    
   );
 }
 
 export default App;
+function useSate<T>() {
+  throw new Error('Function not implemented.');
+}
+

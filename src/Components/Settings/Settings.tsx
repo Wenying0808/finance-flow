@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Settings.css';
-import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment } from '@mui/material';
+import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
 
@@ -13,67 +13,38 @@ interface SettingsProps {
   setBudget: React.Dispatch<React.SetStateAction<number>>;
 
   currencySymbol: string;
+
+  onSave: (currency: string, budget: number) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setBudget, currencySymbol }) => {
+const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setBudget, currencySymbol, onSave }) => {
+  const [newCurrency, setNewCurrency] = useState(currency);
+  const [newBudget, setNewBudget] = useState(budget);
 
   const handleCurrencyChange = (e: SelectChangeEvent<string>) => {
-    setCurrency(e.target.value as string);
+    setNewCurrency(e.target.value as string);
   }
-
-  /*const handleStartDateChange = (e: SelectChangeEvent<number>) => {
-    setStartDate(e.target.value as number);
-  }*/
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBudget(Number(e.target.value));
+    setNewBudget(Number(e.target.value));
   }
 
-
-  const dates: {value: number; label: string}[] = [];
-  for (let i = 1; i <= 31; i++){
-    let label: string;
-    switch(i) {
-      case 1:
-      case 21:
-      case 31:
-        label = `${i}st`;
-        break;
-      case 2:
-      case 22:
-        label = `${i}nd`;
-        break;
-      case 3:
-      case 23:
-        label = `${i}rd`;
-        break;
-      default:
-        label = `${i}th`;    
-    }
-    dates.push({ value: i, label });
-  }
+  const handleSave = () => {
+    onSave(newCurrency, newBudget);
+  };
 
   return (
     
-    <div className="settings-content">
+    <form className="settings-content">
+
       <FormControl sx={{ width: '180px' }}>
         <InputLabel id="currency">Currency</InputLabel>
-        <Select labelId='currency' id="currency" value={currency} onChange={handleCurrencyChange} >
+        <Select labelId='currency' id="currency" value={newCurrency} onChange={handleCurrencyChange} >
           {Currencies.map((currencyOption) => (
             <MenuItem key={currencyOption.value} value={currencyOption.value}>{currencyOption.label}</MenuItem>
           ))}
         </Select>
       </FormControl>
-        
-      {/*<FormControl sx={{ width: '180px' }}>
-        <InputLabel id="starting-date">Starting Date of Month</InputLabel>
-        <Select labelId="starting-date" id="starting-date" value={startDate} onChange={handleStartDateChange} >
-          {dates.map((dateOption) => (
-            <MenuItem key={dateOption.value} value={dateOption.value}>{dateOption.label}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-          */}
      
 
       <TextField 
@@ -86,12 +57,14 @@ const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setB
           startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
         }} 
 
-        value={budget} 
+        value={newBudget} 
         onChange={handleBudgetChange}
 
         required/>
+      
+      <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>
 
-    </div>
+    </form>
   );
 };
 
