@@ -36,16 +36,22 @@ const categoryIconMap: CategoryIconMap = {
 
 const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol, onDeleteExpense}) => {
 
-  
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>( () => {
+    // Retrieve expenses from sessionStorage if available, otherwise use an empty array
+    const savedExpenses = sessionStorage.getItem('expenses');
+    return savedExpenses ? JSON.parse(savedExpenses) : [];
+  });
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [monthlyTotalExpense, setMonthlyTotalExpense] = useState<number>(0);
   const [monthlyBalance, setMonthlyBalance] = useState<number>(budget);
 
-  
+  // Function to save expenses to sessionStorage
+  const saveExpensesToSessionStorage = (expenses: Expense[]) => {
+    sessionStorage.setItem('expenses', JSON.stringify(expenses));
+  }
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -64,6 +70,7 @@ const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol
     setEditingExpense(null);
     setEditModalOpen(false);
   };
+
 
   const handleSaveExpense = (expense: Expense) => {
     if (editingExpense) {
@@ -89,7 +96,7 @@ const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol
   const filteredExpenses = useMemo(() => {
     if(!expenses.length) return [];
     return expenses.filter((expense) => dayjs(expense.date).format('MM YYYY') === formattedSelectedMonthAndYear);
-  },[expenses, formattedSelectedMonthAndYear]);
+  },[expenses, selectedMonthAndYear, formattedSelectedMonthAndYear]);
 
   const handlePreviousMonth = () => {
     setSelectedMonthAndYear((prevState) => ({
@@ -114,23 +121,24 @@ const Statistics: React.FC<StatisticsProps> = ({currency, budget, currencySymbol
   };
  
   function sortExpenseByDate(expenses: Expense[]) {
-    return expenses.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return [...expenses].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
 
   useEffect(() => {
-    //sort log from the latest to the oldest
-    const sortedExpenses = sortExpenseByDate(expenses);
-    setExpenses(sortedExpenses);
+    // Call function to save expenses whenever expenses change
+    saveExpensesToSessionStorage(expenses);
 
     //filter expenses based on selected month and year
-
     const filteredExpensesByMonthAndYear = expenses.filter((expense) => 
       dayjs(expense.date).format('MM YYYY') === formattedSelectedMonthAndYear
     );
 
+    //sort log from the latest to the oldest
+    const sortedFilteredExpenses = sortExpenseByDate(filteredExpensesByMonthAndYear);
+
     //sum the expense whenever expense changes
-    const sumOfMonthlyExpense = filteredExpensesByMonthAndYear.reduce((accumulation, newExpense)=> accumulation + newExpense.amount, 0 ); //inital accumultation is 0
+    const sumOfMonthlyExpense = sortedFilteredExpenses.reduce((accumulation, newExpense)=> accumulation + newExpense.amount, 0 ); //inital accumultation is 0
   
     setMonthlyTotalExpense(sumOfMonthlyExpense);
 
