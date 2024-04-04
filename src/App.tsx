@@ -9,7 +9,7 @@ import { Currencies } from './Components/Expenses/Currencies';
 import {useUserContext } from './Contexts/UserContextProvider';
 
 const App: React.FC = () => {
-  const { currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol } = useUserContext();
+  const { currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, db } = useUserContext();
 
   const [currentTab, setCurrentTab] = React.useState<Tab>(Tab.ACCOUNT);
 

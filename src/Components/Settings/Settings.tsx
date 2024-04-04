@@ -13,7 +13,8 @@ interface SettingsProps {
 const Settings: React.FC<SettingsProps> = ({ onSave }) => {
   
   //access uid from context
-  const {uid, currency, setCurrency, budget, setBudget, currencySymbol} = useUserContext();
+  const {currency, setCurrency, budget, setBudget, currencySymbol, uid, db} = useUserContext();
+
   const [newCurrency, setNewCurrency] = useState<string>(currency);
   const [newBudget, setNewBudget] = useState<number>(budget);
 

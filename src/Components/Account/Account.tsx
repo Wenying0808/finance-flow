@@ -9,7 +9,7 @@ import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
 
 const Account: React.FC = () => {
-    const { uid, setUid, auth } = useUserContext();
+    const { uid, setUid, auth, db } = useUserContext();
 
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);

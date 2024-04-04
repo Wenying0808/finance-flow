@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import React, {createContext, useState, useContext, ReactNode} from 'react';
 
 
@@ -16,6 +17,9 @@ export const firebaseConfig = {
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 export const auth = app.auth();
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
 
 interface UserContextProps {
     children: ReactNode;
@@ -53,7 +57,7 @@ const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {
     const [currencySymbol, setCurrencySymbol] = useState<string>('€');
 
     return(
-        <UserContext.Provider value={{ uid, setUid, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, auth}}>
+        <UserContext.Provider value={{ uid, setUid, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, auth, db}}>
             {children}
         </UserContext.Provider>
     );
