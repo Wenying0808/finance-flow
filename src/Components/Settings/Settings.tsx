@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './Settings.css';
-import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button } from '@mui/material';
+import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button, Snackbar, Alert, IconButton } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import { doc, setDoc } from "firebase/firestore";
+import { MdClose } from "react-icons/md";
 
 
 
@@ -15,10 +16,18 @@ const Settings: React.FC= () => {
   const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db, usersRef} = useUserContext();
 
   const [newCurrency, setNewCurrency] = useState<string>(currency);
+  const [newCurrencySymbol, setNewCurrencySymbol] = useState<string>(currencySymbol);
   const [newBudget, setNewBudget] = useState<number>(budget);
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [alertSeverity, setAlertSeverity] = useState<string>('');
+  const [alertMessage, setAlertMessage] = useState<string>('');
 
   const handleCurrencyChange = (e: SelectChangeEvent<string>) => {
-    setNewCurrency(e.target.value as string);
+    const selectedCurrency = Currencies.find(curr => curr.value === e.target.value);
+    if(selectedCurrency){
+      setNewCurrency(e.target.value as string);
+      setNewCurrencySymbol(selectedCurrency.symbol);
+    }
   }
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,15 +45,25 @@ const Settings: React.FC= () => {
       setBudget(newBudget);
       console.log("User settings updated successfully!");
 
+      //show alert
+      setOpenAlert(true);
+      setAlertSeverity('success'); 
+
     } catch (error) {
       console.error("Error updating user settings:", error);
+      setOpenAlert(true);
+      setAlertSeverity('error'); 
     }
 
   };
 
+  const handleAlertClose = () => {
+    setOpenAlert(false);
+  };
+
   return (
     
-    <form className="settings-content">
+    <div className="settings-content">
 
       <FormControl sx={{ width: '180px' }}>
         <InputLabel id="currency">Currency</InputLabel>
@@ -63,7 +82,7 @@ const Settings: React.FC= () => {
         variant="outlined"
 
         InputProps={{
-          startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
+          startAdornment: <InputAdornment position="start">{newCurrencySymbol}</InputAdornment>,
         }} 
 
         value={newBudget} 
@@ -72,8 +91,21 @@ const Settings: React.FC= () => {
         required/>
       
       <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>
+      
       <div>uid:{uid}</div>
-    </form>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={5000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        {alertSeverity === "success" 
+        ? <Alert severity="success" onClose={handleAlertClose}>Settings saved successfully!</Alert>
+        : <Alert severity="error" >Error saving settings. Please try again.</Alert>
+        }
+      </Snackbar>
+      
+    </div>
   );
 };
 
