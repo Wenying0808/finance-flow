@@ -4,16 +4,15 @@ import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, B
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
 import { useUserContext } from '../../Contexts/UserContextProvider';
+import { doc, setDoc } from "firebase/firestore";
 
 
-interface SettingsProps {
-  onSave: (newCurrency: string, newBudget: number) => void;
-}
 
-const Settings: React.FC<SettingsProps> = ({ onSave }) => {
+
+const Settings: React.FC= () => {
   
   //access uid from context
-  const {currency, setCurrency, budget, setBudget, currencySymbol, uid, db} = useUserContext();
+  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db, usersRef} = useUserContext();
 
   const [newCurrency, setNewCurrency] = useState<string>(currency);
   const [newBudget, setNewBudget] = useState<number>(budget);
@@ -26,8 +25,21 @@ const Settings: React.FC<SettingsProps> = ({ onSave }) => {
     setNewBudget(Number(e.target.value));
   }
 
-  const handleSave = () => {
-    onSave(newCurrency, newBudget);
+  const handleSave = async() => {
+
+    //store to firestore
+    try {
+      const userDocRef = doc(db, "Users", userDocId);
+      await setDoc(userDocRef, {currency: newCurrency, budget: newBudget, expenses: {}, uid: uid});
+
+      setCurrency(newCurrency);
+      setBudget(newBudget);
+      console.log("User settings updated successfully!");
+
+    } catch (error) {
+      console.error("Error updating user settings:", error);
+    }
+
   };
 
   return (

@@ -9,7 +9,7 @@ import { Currencies } from './Components/Expenses/Currencies';
 import {useUserContext } from './Contexts/UserContextProvider';
 
 const App: React.FC = () => {
-  const { currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, db } = useUserContext();
+  const { uid,  userDocId, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, db } = useUserContext();
 
   const [currentTab, setCurrentTab] = React.useState<Tab>(Tab.ACCOUNT);
 
@@ -18,12 +18,7 @@ const App: React.FC = () => {
       case Tab.ACCOUNT:
         return <Account/>;
       case Tab.SETTINGS:
-        return <Settings 
-                  onSave={(newCurrency, newBudget) => {
-                    setCurrency(newCurrency);
-                    setBudget(newBudget);
-                  }}
-              />;
+        return <Settings />;
       case Tab.STATISTICS:
         return <Statistics onDeleteExpense={function (expenseId: string): void {
           throw new Error('Function not implemented.');

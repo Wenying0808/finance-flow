@@ -34,7 +34,7 @@ const categoryIconMap: CategoryIconMap = {
 const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense}) => {
 
   //access uid from context
-  const {currencySymbol, budget, uid, db} = useUserContext();
+  const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
 
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [modalOpen, setModalOpen] = useState<boolean>(false);

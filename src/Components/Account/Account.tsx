@@ -4,12 +4,13 @@ import { TextField, Button } from '@mui/material';
 import './Account.css';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import { doc, collection, addDoc, setDoc, getDoc, where, query, getDocs } from "firebase/firestore";
 import validator from 'validator';
 import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
 
 const Account: React.FC = () => {
-    const { uid, setUid, auth, db } = useUserContext();
+    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
 
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
@@ -31,6 +32,7 @@ const Account: React.FC = () => {
         }
     }, []);
 
+
     //access uid when user is signed in
     useEffect(() => {
         //sets up a listener for authentication state changes
@@ -44,6 +46,27 @@ const Account: React.FC = () => {
         //detach the listener when the component unmounts
         return () => unsubscribe();
     },[])
+
+    //fetch UserDocId from firestore after successful sign-In
+    useEffect(() => {
+        const fetchUserDocId = async () => {
+          const userQuery = query(collection(db, "Users"), where("uid", "==", uid));
+          const userSnapshot = await getDocs(userQuery);
+      
+          if (userSnapshot.size > 0) {
+            const userDoc = userSnapshot.docs[0]; // Assuming a single match
+            setUserDocId(userDoc.id);
+          } else {
+            console.error("No matching user document found");
+            // Handle the case where no document matches
+          }
+        };
+      
+        if (signedIn && !userDocId) {
+          fetchUserDocId();
+        }
+      }, [signedIn, uid, db]);
+
 
     const validateEmail = (email: string) => {
          if(validator.isEmail(email)){
@@ -67,8 +90,30 @@ const Account: React.FC = () => {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             //update sign in state after successfully sign up
             setSignedIn(true);
+
+            //session storage 
+            sessionStorage.setItem('signedIn', 'true');
+            sessionStorage.setItem('userName', userName);
+            sessionStorage.setItem('email', email);
+
             if (userCredential.user && userCredential.user.uid){
+
+                // create user document with the uid as document id
+                const userDocRef = doc(db, "Users", userCredential.user.uid);
+
+                //define the user settings
+                const userSettings = { 
+                    uid: userCredential.user.uid,
+                    currency, 
+                    budget, 
+                    expenses: [] 
+                };
+
+                await setDoc(userDocRef, userSettings);
+
                 setUid(userCredential.user.uid);
+                
+
             } else{
                 setUid(null);
             }
@@ -93,8 +138,20 @@ const Account: React.FC = () => {
             sessionStorage.setItem('userName', userName);
             sessionStorage.setItem('email', email);
 
+
             if (userCredential.user && userCredential.user.uid){
                 setUid(userCredential.user.uid);
+                const userDocRef = doc(db, "Users", userCredential.user.uid);
+                const docSnapshot = await getDoc(userDocRef);
+                if (docSnapshot.exists()){
+                    const userSettings = docSnapshot.data();
+                    setCurrency(userSettings.currency);
+                    setBudget(userSettings.budget);
+                    setUserDocId(userCredential.user.uid);
+                } else {
+                    console.error("No matching user document found");
+                }
+
             } else {
                 setUid(null);
             }
@@ -120,6 +177,8 @@ const Account: React.FC = () => {
         setUserName('');
         setEmail('');
         setPassword('');
+        setUid(null);
+        setUserDocId(null);
 
     };
 

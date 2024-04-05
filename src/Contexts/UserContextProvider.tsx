@@ -1,6 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 import React, {createContext, useState, useContext, ReactNode} from 'react';
 
 
@@ -21,6 +21,11 @@ export const auth = app.auth();
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
+//Access Users collection
+const usersRef = collection(db, "Users");
+
+
+
 interface UserContextProps {
     children: ReactNode;
 };
@@ -28,6 +33,8 @@ interface UserContextProps {
 interface UserContextType {
     uid: string | null;
     setUid: React.Dispatch<React.SetStateAction<string | null>>;
+    userDocId: string | null ;
+    setUserDocId: React.Dispatch<React.SetStateAction<string | null>>;
     currency: string;
     setCurrency: React.Dispatch<React.SetStateAction<string>>;
     budget: number;
@@ -36,28 +43,19 @@ interface UserContextType {
     setCurrencySymbol: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const defaultUserContext: UserContextType = {
-    uid: null,
-    setUid: () => {},
-    currency: 'EUR',
-    setCurrency: () => {},
-    budget: 1000, 
-    setBudget: () => {},
-    currencySymbol: '€',
-    setCurrencySymbol: () => {},
-};
-
 const UserContext = createContext<any>(null);
 export const useUserContext = () => useContext(UserContext);
 
 const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {
     const [uid, setUid] = useState<string | null>(null);
+    const [userDocId, setUserDocId] = useState<string | null>(null);
     const [currency, setCurrency] = useState<string>('EUR');
     const [budget, setBudget] = useState<number>(1000);
     const [currencySymbol, setCurrencySymbol] = useState<string>('€');
 
+
     return(
-        <UserContext.Provider value={{ uid, setUid, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, auth, db}}>
+        <UserContext.Provider value={{ uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, auth, db, usersRef}}>
             {children}
         </UserContext.Provider>
     );
