@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Settings.css';
 import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button, Snackbar, Alert, IconButton } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
 import { useUserContext } from '../../Contexts/UserContextProvider';
-import { doc, setDoc } from "firebase/firestore";
-import { MdClose } from "react-icons/md";
-
-
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 
 const Settings: React.FC= () => {
@@ -20,7 +17,7 @@ const Settings: React.FC= () => {
   const [newBudget, setNewBudget] = useState<number>(budget);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [alertSeverity, setAlertSeverity] = useState<string>('');
-  const [alertMessage, setAlertMessage] = useState<string>('');
+
 
   const handleCurrencyChange = (e: SelectChangeEvent<string>) => {
     const selectedCurrency = Currencies.find(curr => curr.value === e.target.value);
@@ -39,7 +36,7 @@ const Settings: React.FC= () => {
     //store to firestore
     try {
       const userDocRef = doc(db, "Users", userDocId);
-      await setDoc(userDocRef, {currency: newCurrency, budget: newBudget, expenses: {}, uid: uid});
+      await setDoc(userDocRef, {currency: newCurrency, budget: newBudget, uid: uid});
 
       setCurrency(newCurrency);
       setBudget(newBudget);
@@ -92,7 +89,7 @@ const Settings: React.FC= () => {
       
       <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>
       
-      <div>uid:{uid}</div>
+      {/*<div>uid:{uid}</div>*/}
       <Snackbar
         open={openAlert}
         autoHideDuration={5000}

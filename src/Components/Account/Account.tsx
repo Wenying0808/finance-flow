@@ -67,6 +67,29 @@ const Account: React.FC = () => {
         }
       }, [signedIn, uid, db]);
 
+    useEffect(() => {
+        if(uid && userDocId){
+          try{
+            const fetchSettings = async() => {
+              const userDocRef = doc(db, "Users", userDocId);
+              const docSnapshot = await getDoc(userDocRef);
+                        if (docSnapshot.exists()){
+                            const userSettings = docSnapshot.data();
+                            setCurrency(userSettings.currency);
+                            setBudget(userSettings.budget);  
+                        } else {
+                            console.error("No matching user document found");
+                        }
+            }
+            fetchSettings();
+    
+          } catch (error) {
+            console.error("Error fetching user settings:", error);
+          }
+          
+        }
+      }, [uid, userDocId, db]);
+
 
     const validateEmail = (email: string) => {
          if(validator.isEmail(email)){
@@ -106,7 +129,6 @@ const Account: React.FC = () => {
                     uid: userCredential.user.uid,
                     currency, 
                     budget, 
-                    expenses: [] 
                 };
 
                 await setDoc(userDocRef, userSettings);
@@ -141,17 +163,6 @@ const Account: React.FC = () => {
 
             if (userCredential.user && userCredential.user.uid){
                 setUid(userCredential.user.uid);
-                const userDocRef = doc(db, "Users", userCredential.user.uid);
-                const docSnapshot = await getDoc(userDocRef);
-                if (docSnapshot.exists()){
-                    const userSettings = docSnapshot.data();
-                    setCurrency(userSettings.currency);
-                    setBudget(userSettings.budget);
-                    setUserDocId(userCredential.user.uid);
-                } else {
-                    console.error("No matching user document found");
-                }
-
             } else {
                 setUid(null);
             }
@@ -162,6 +173,10 @@ const Account: React.FC = () => {
             setIsAccountFormValid(true);
           }
     };
+
+    useEffect(() => {
+        console.log("userDocId: ",userDocId);
+      }, [userDocId]);
 
     //function to handle sign out
 
@@ -194,7 +209,7 @@ const Account: React.FC = () => {
                     <span>{signInErrorMessage}</span>
                 </div>
             )}
-            <div>uid:{uid}</div>
+            {/*<div>uid:{uid}</div>*/}
             <div className="buttons">
                 <Button variant="outlined" onClick={handleSignUp} disabled={!isAccountFormValid}>Sign up</Button>
                 <Button variant="contained" onClick={handleSignIn} disabled={!isAccountFormValid}>Sign in</Button>
@@ -211,7 +226,7 @@ const Account: React.FC = () => {
             <div className="account-login-info">
                 <div className="account-login-info-name">{userName}</div>
                 <div className="account-login-info-email">{email}</div>
-                <div>uid:{uid}</div>
+                {/*<div>uid:{uid}</div>*/}
             </div>
             
             <Button variant="outlined" onClick={handleSignOut}>Sign out</Button>
