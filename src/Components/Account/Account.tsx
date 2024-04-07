@@ -4,27 +4,13 @@ import { TextField, Button } from '@mui/material';
 import './Account.css';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import { doc, collection, addDoc, setDoc, getDoc, where, query, getDocs } from "firebase/firestore";
 import validator from 'validator';
 import { IoAlertCircle } from "react-icons/io5";
-
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDWajFmlQ1rtmLEqrDxq5ytF6w2hktj_fc",
-    authDomain: "finance-flow-ebfc3.firebaseapp.com",
-    projectId: "finance-flow-ebfc3",
-    storageBucket: "finance-flow-ebfc3.appspot.com",
-    messagingSenderId: "532090806268",
-    appId: "1:532090806268:web:886f032786f846be11dc79",
-    measurementId: "G-9KNBRJQFLR"
-  };
-
-
-// Check if Firebase is not already initialized
-const app = firebase.initializeApp(firebaseConfig);
-const auth = app.auth();
-
+import { useUserContext } from '../../Contexts/UserContextProvider';
 
 const Account: React.FC = () => {
+    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
 
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
@@ -34,10 +20,10 @@ const Account: React.FC = () => {
     const [userName, setUserName] = useState<string>('');
     const [isAccountFormValid, setIsAccountFormValid] = useState<boolean>(false);
     const [signInErrorMessage, setSignInErrorMessage] = useState<string | null>(null);
+    /*const [uid, setUid] = useState<string|null>(null);*/
 
     //check if user is signed in from session Storage or local storage
     useEffect(() => {
-        
         const isSignedIn = sessionStorage.getItem('signedIn') === 'true';
         setSignedIn(isSignedIn);
         if (isSignedIn) {
@@ -45,6 +31,65 @@ const Account: React.FC = () => {
             setEmail(sessionStorage.getItem('email') || '');
         }
     }, []);
+
+
+    //access uid when user is signed in
+    useEffect(() => {
+        //sets up a listener for authentication state changes
+        const unsubscribe = firebase.auth().onAuthStateChanged((user)=>{
+            if(user) {
+                setUid(user.uid);
+            } else{
+                setUid(null);
+            }
+        });
+        //detach the listener when the component unmounts
+        return () => unsubscribe();
+    },[])
+
+    //fetch UserDocId from firestore after successful sign-In
+    useEffect(() => {
+        const fetchUserDocId = async () => {
+          const userQuery = query(collection(db, "Users"), where("uid", "==", uid));
+          const userSnapshot = await getDocs(userQuery);
+      
+          if (userSnapshot.size > 0) {
+            const userDoc = userSnapshot.docs[0]; // Assuming a single match
+            setUserDocId(userDoc.id);
+          } else {
+            console.error("No matching user document found");
+            // Handle the case where no document matches
+          }
+        };
+      
+        if (signedIn && !userDocId) {
+          fetchUserDocId();
+        }
+      }, [signedIn, uid, db]);
+
+    useEffect(() => {
+        if(uid && userDocId){
+          try{
+            const fetchSettings = async() => {
+              const userDocRef = doc(db, "Users", userDocId);
+              const docSnapshot = await getDoc(userDocRef);
+                        if (docSnapshot.exists()){
+                            const userSettings = docSnapshot.data();
+                            setCurrency(userSettings.currency);
+                            setBudget(userSettings.budget);  
+                        } else {
+                            console.error("No matching user document found");
+                        }
+            }
+            fetchSettings();
+    
+          } catch (error) {
+            console.error("Error fetching user settings:", error);
+          }
+          
+        }
+      }, [uid, userDocId, db]);
+
 
     const validateEmail = (email: string) => {
          if(validator.isEmail(email)){
@@ -68,27 +113,70 @@ const Account: React.FC = () => {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             //update sign in state after successfully sign up
             setSignedIn(true);
+
+            //session storage 
+            sessionStorage.setItem('signedIn', 'true');
+            sessionStorage.setItem('userName', userName);
+            sessionStorage.setItem('email', email);
+
+            if (userCredential.user && userCredential.user.uid){
+
+                // create user document with the uid as document id
+                const userDocRef = doc(db, "Users", userCredential.user.uid);
+
+                //define the user settings
+                const userSettings = { 
+                    uid: userCredential.user.uid,
+                    currency, 
+                    budget, 
+                };
+
+                await setDoc(userDocRef, userSettings);
+
+                setUid(userCredential.user.uid);
+                
+
+            } else{
+                setUid(null);
+            }
+            console.log(uid);
+            
         } catch (error: any) {
             console.error('Error signing up:', error.message);
           }
     };
 
     //function to handle sign in 
-    const handleSignIn = async () : Promise<void> => {
+    const handleSignIn = async (): Promise<void> => {
         try {
-            // Sign in with email and password using Firebase
-            await auth.signInWithEmailAndPassword(email, password);
+             // Sign in with email and password
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+
             // Update signedIn state to true
             setSignedIn(true);
+
+            //session storage 
             sessionStorage.setItem('signedIn', 'true');
             sessionStorage.setItem('userName', userName);
             sessionStorage.setItem('email', email);
+
+
+            if (userCredential.user && userCredential.user.uid){
+                setUid(userCredential.user.uid);
+            } else {
+                setUid(null);
+            }
+
           } catch (error: any) {
             setSignInErrorMessage("Invalid email or password")
           } finally {
             setIsAccountFormValid(true);
           }
     };
+
+    useEffect(() => {
+        console.log("userDocId: ",userDocId);
+      }, [userDocId]);
 
     //function to handle sign out
 
@@ -104,6 +192,8 @@ const Account: React.FC = () => {
         setUserName('');
         setEmail('');
         setPassword('');
+        setUid(null);
+        setUserDocId(null);
 
     };
 
@@ -119,6 +209,7 @@ const Account: React.FC = () => {
                     <span>{signInErrorMessage}</span>
                 </div>
             )}
+            {/*<div>uid:{uid}</div>*/}
             <div className="buttons">
                 <Button variant="outlined" onClick={handleSignUp} disabled={!isAccountFormValid}>Sign up</Button>
                 <Button variant="contained" onClick={handleSignIn} disabled={!isAccountFormValid}>Sign in</Button>
@@ -135,6 +226,7 @@ const Account: React.FC = () => {
             <div className="account-login-info">
                 <div className="account-login-info-name">{userName}</div>
                 <div className="account-login-info-email">{email}</div>
+                {/*<div>uid:{uid}</div>*/}
             </div>
             
             <Button variant="outlined" onClick={handleSignOut}>Sign out</Button>

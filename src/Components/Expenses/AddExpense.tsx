@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, InputAdornment, IconButton} from '@mui/material';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import { Categories } from "./Categories";
 import { SelectChangeEvent } from "@mui/material";
 
@@ -10,14 +11,18 @@ import { Expense } from "./ExpenseInterface";
 import { v4 as uuidv4 } from 'uuid';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
+import { useUserContext } from "../../Contexts/UserContextProvider";
+import { collection, doc, setDoc } from "firebase/firestore";
+
 
 interface AddExpensePageProps {
-    currencySymbol: string;
     onSave: (expense: Expense) => void;
     onCancel: () => void;
 }
 
-const AddExpensePage: React.FC<AddExpensePageProps> = ({currencySymbol, onSave, onCancel }) => {
+const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
+
+    const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
 
     const [description, setDescription] = useState<string>('');
     const [category, setCategory]= useState<string>('');
@@ -29,6 +34,7 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({currencySymbol, onSave, 
     const handleDateChange = (newDate: string | null) => {
         if (newDate) {
             setDate(newDate);
+            console.log("newDate:", newDate);
         }
     }
 
@@ -45,12 +51,12 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({currencySymbol, onSave, 
     }
 
      //check if all inputs have value (not empty)
-    const useCheckInputValidity = (description: string, category: string, amount: number, date: string) => {
+    const useCheckInputValidity = (date: string, category: string, description: string, amount: number, ) => {
         return useCallback(() => {
           return description.trim() !== '' && category.trim() !== '' && amount > 0 && date !== '';
         }, [description, category, amount, date]);
       };
-    const isInputValid = useCheckInputValidity(description, category, amount, date);
+    const isInputValid = useCheckInputValidity(date, category, description, amount);
 
     //address async updates from the inputs
     useEffect(() => {
@@ -60,17 +66,17 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({currencySymbol, onSave, 
    
 
     const handleSave = () => {
-        const expense: Expense = {
+        const newExpense: Expense = {
             id: uuidv4(),
-            date,
+            date: dayjs(date).toISOString(),
             category,
             description,
-            amount,
-            
+            amount,  
         };
 
-        onSave(expense);
-        onCancel(); //close the modal
+            onSave(newExpense);
+            onCancel(); //close the modal
+            console.log("date of newExpense:", newExpense.date);
     };
 
     return (

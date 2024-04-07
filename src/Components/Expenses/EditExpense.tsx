@@ -7,26 +7,27 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import './EditExpense.css';
 import { Expense } from "./ExpenseInterface";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import dayjs from "dayjs";
+import { useUserContext } from "../../Contexts/UserContextProvider";
 
 
 interface EditExpensePageProps {
-    currencySymbol: string;
     expense?: Expense | null | undefined;
     onSave: (expense: Expense) => void;
     onCancel: () => void;
     onDeleteExpense: (expenseId: string) => void;
-    
 }
 
-const EditExpensePage: React.FC<EditExpensePageProps> = ({ currencySymbol, expense, onSave, onCancel, onDeleteExpense }) => {
+const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCancel, onDeleteExpense }) => {
+
+    const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
 
     const [formData, setFormData] = useState<Expense>({
-        id: expense?.id ||'',
-        date: expense?.date || '',
-        category: expense?.category || '',
-        description: expense?.description || '',
-        amount: expense?.amount || 0,
-        
+        id: expense ? expense.id : '',
+        date: expense ? expense.date : '',
+        category: expense ? expense.category : '',
+        description: expense ? expense.description : '',
+        amount: expense ? expense.amount : 0,
     });
 
     
@@ -34,7 +35,7 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ currencySymbol, expen
         setFormData( (prevData) => {
             return {
                 ...prevData,
-                date: date ? date.toString() : prevData.date
+                date: date ? dayjs(date).toISOString() : prevData.date
             }
         } );
     };
@@ -129,10 +130,9 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ currencySymbol, expen
                         startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
                       }} 
                 />
-
-               
                 
             </form>
+
             <div className="edit-expense-buttons">
                 <Button variant="contained" color="error" startIcon={<RiDeleteBinLine />} onClick={handleDeleteClick}>Delete</Button>
                 <Button variant="outlined" sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} onClick={onCancel}>Cancel</Button>

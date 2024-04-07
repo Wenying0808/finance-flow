@@ -1,79 +1,80 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Settings.css';
-import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment } from '@mui/material';
+import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button, Snackbar, Alert, IconButton } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
+import { useUserContext } from '../../Contexts/UserContextProvider';
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 
-interface SettingsProps {
-  currency: string;
-  setCurrency: React.Dispatch<React.SetStateAction<string>>;
+const Settings: React.FC= () => {
+  
+  //access uid from context
+  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db, usersRef} = useUserContext();
 
-  budget: number;
-  setBudget: React.Dispatch<React.SetStateAction<number>>;
+  const [newCurrency, setNewCurrency] = useState<string>(currency);
+  const [newCurrencySymbol, setNewCurrencySymbol] = useState<string>(currencySymbol);
+  const [newBudget, setNewBudget] = useState<number>(budget);
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [alertSeverity, setAlertSeverity] = useState<string>('');
 
-  currencySymbol: string;
-}
-
-const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setBudget, currencySymbol }) => {
 
   const handleCurrencyChange = (e: SelectChangeEvent<string>) => {
-    setCurrency(e.target.value as string);
+    const selectedCurrency = Currencies.find(curr => curr.value === e.target.value);
+    if(selectedCurrency){
+      setNewCurrency(e.target.value as string);
+      setNewCurrencySymbol(selectedCurrency.symbol);
+    }
   }
-
-  /*const handleStartDateChange = (e: SelectChangeEvent<number>) => {
-    setStartDate(e.target.value as number);
-  }*/
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBudget(Number(e.target.value));
+    setNewBudget(Number(e.target.value));
   }
 
+  const handleSave = async() => {
 
-  const dates: {value: number; label: string}[] = [];
-  for (let i = 1; i <= 31; i++){
-    let label: string;
-    switch(i) {
-      case 1:
-      case 21:
-      case 31:
-        label = `${i}st`;
-        break;
-      case 2:
-      case 22:
-        label = `${i}nd`;
-        break;
-      case 3:
-      case 23:
-        label = `${i}rd`;
-        break;
-      default:
-        label = `${i}th`;    
+    //store to firestore
+    try {
+      const userDocRef = doc(db, "Users", userDocId);
+      await setDoc(userDocRef, {currency: newCurrency, budget: newBudget, uid: uid});
+
+      setCurrency(newCurrency);
+      setBudget(newBudget);
+      console.log("User settings updated successfully!");
+
+      //show alert
+      setOpenAlert(true);
+      setAlertSeverity('success'); 
+
+    } catch (error) {
+      console.error("Error updating user settings:", error);
+      setOpenAlert(true);
+      setAlertSeverity('error'); 
     }
-    dates.push({ value: i, label });
-  }
+
+  };
+
+  const handleAlertClose = () => {
+    setOpenAlert(false);
+  };
 
   return (
     
     <div className="settings-content">
+
       <FormControl sx={{ width: '180px' }}>
         <InputLabel id="currency">Currency</InputLabel>
-        <Select labelId='currency' id="currency" value={currency} onChange={handleCurrencyChange} >
+        <Select 
+          labelId='currency' 
+          id="currency" 
+          value={newCurrency} 
+          onChange={handleCurrencyChange} 
+        >
           {Currencies.map((currencyOption) => (
             <MenuItem key={currencyOption.value} value={currencyOption.value}>{currencyOption.label}</MenuItem>
           ))}
         </Select>
       </FormControl>
-        
-      {/*<FormControl sx={{ width: '180px' }}>
-        <InputLabel id="starting-date">Starting Date of Month</InputLabel>
-        <Select labelId="starting-date" id="starting-date" value={startDate} onChange={handleStartDateChange} >
-          {dates.map((dateOption) => (
-            <MenuItem key={dateOption.value} value={dateOption.value}>{dateOption.label}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-          */}
      
 
       <TextField 
@@ -83,14 +84,29 @@ const Settings: React.FC<SettingsProps> = ({ currency, setCurrency, budget, setB
         variant="outlined"
 
         InputProps={{
-          startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
+          startAdornment: <InputAdornment position="start">{newCurrencySymbol}</InputAdornment>,
         }} 
 
-        value={budget} 
+        value={newBudget} 
         onChange={handleBudgetChange}
 
         required/>
-
+      
+      <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>
+      
+      {/*<div>uid:{uid}</div>*/}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={5000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        {alertSeverity === "success" 
+        ? <Alert severity="success" onClose={handleAlertClose}>Settings saved successfully!</Alert>
+        : <Alert severity="error" >Error saving settings. Please try again.</Alert>
+        }
+      </Snackbar>
+      
     </div>
   );
 };
