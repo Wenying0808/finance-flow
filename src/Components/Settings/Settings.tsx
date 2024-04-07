@@ -64,7 +64,12 @@ const Settings: React.FC= () => {
 
       <FormControl sx={{ width: '180px' }}>
         <InputLabel id="currency">Currency</InputLabel>
-        <Select labelId='currency' id="currency" value={newCurrency} onChange={handleCurrencyChange} >
+        <Select 
+          labelId='currency' 
+          id="currency" 
+          value={newCurrency} 
+          onChange={handleCurrencyChange} 
+        >
           {Currencies.map((currencyOption) => (
             <MenuItem key={currencyOption.value} value={currencyOption.value}>{currencyOption.label}</MenuItem>
           ))}

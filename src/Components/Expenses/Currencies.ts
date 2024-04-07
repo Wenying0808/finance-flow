@@ -12,6 +12,7 @@ export const Currencies = [
     { value: 'KRW', label: 'KRW (₩)', symbol: '₩'},
     { value: 'MXN', label: 'MXN (Mex$)', symbol: 'Mex$'},
     { value: 'NOK', label: 'NOK (kr)', symbol: 'kr'},
+    { value: 'NTD', label: 'NTD ($)', symbol: 'NT$'},
     { value: 'NZD', label: 'NZD (NZ$)', symbol: 'NZ$'},
     { value: 'RUB', label: 'RUB (₽)', symbol: '₽'},
     { value: 'SEK', label: 'SEK (kr)', symbol: 'Kr'},
