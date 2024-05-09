@@ -130,7 +130,8 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
                     value = {amount}
                     onChange={handleAmountChange}
                     required
-
+                    type="number"
+                    inputProps={{ step: "any" }} 
                     InputProps={{
                         startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
                       }} 
