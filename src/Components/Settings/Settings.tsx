@@ -82,7 +82,8 @@ const Settings: React.FC= () => {
         id="budget" 
         label="Budget" 
         variant="outlined"
-
+        type="number"
+        inputProps={{ step: "any" }} 
         InputProps={{
           startAdornment: <InputAdornment position="start">{newCurrencySymbol}</InputAdornment>,
         }} 
