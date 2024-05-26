@@ -86,11 +86,10 @@
 }
 
 .summary-log-list{
-
     position: absolute;
     top: 173px;
     left: 0;
-    bottom: 73px; 
+    bottom: 158px; 
     
     display: flex;
     width: 100%;
