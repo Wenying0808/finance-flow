@@ -8,7 +8,7 @@ import { doc, collection, addDoc, setDoc, getDoc, where, query, getDocs } from "
 import validator from 'validator';
 import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
-
+import GoogleIcon from '@mui/icons-material/Google';
 const Account: React.FC = () => {
     const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
 
@@ -174,6 +174,40 @@ const Account: React.FC = () => {
           }
     };
 
+    //sign in via gmail
+    const handleGmailSignIn = async () => {
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            const result = await auth.signInWithPopup(provider);
+
+            if (result.user) {
+                console.log("gmail sign in result ", result);
+                const user = result.user;
+                const userRef = doc(db, "Users", user.uid);
+                const docSnapshot = await getDoc(userRef);
+                
+                //add user to db if not exist
+                if(! docSnapshot.exists()){
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        currency,
+                        budget,
+                      });
+                }
+                setSignedIn(true);
+                sessionStorage.setItem('signedIn', 'true');
+                sessionStorage.setItem('userName', user.displayName || '');
+                sessionStorage.setItem('email', user.email || '');
+                setUid(user.uid);
+                setUserName(user.displayName);
+                setEmail(user.email);
+            }
+
+        } catch (error: any) {
+            console.error("Error during Google sign-in:", error.message);
+        }
+    }
+
     useEffect(() => {
         console.log("userDocId: ",userDocId);
       }, [userDocId]);
@@ -211,9 +245,33 @@ const Account: React.FC = () => {
             )}
             {/*<div>uid:{uid}</div>*/}
             <div className="buttons">
-                <Button variant="outlined" onClick={handleSignUp} disabled={!isAccountFormValid}>Sign up</Button>
-                <Button variant="contained" onClick={handleSignIn} disabled={!isAccountFormValid}>Sign in</Button>
-
+                <Button 
+                    variant="outlined"
+                    size="small"
+                    onClick={handleSignUp} 
+                    disabled={!isAccountFormValid}
+                    sx={{ color:"#4758DC", border:"1px solid #4758DC", '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}}}
+                >
+                    Sign up
+                </Button>
+                <Button 
+                    variant="contained"
+                    size="small"
+                    onClick={handleSignIn} 
+                    disabled={!isAccountFormValid}
+                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}}
+                >
+                    Log in
+                </Button>
+                <Button 
+                    variant="contained"
+                    size="small"
+                    onClick={handleGmailSignIn} 
+                    startIcon={<GoogleIcon/>}
+                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}}
+                >
+                    Log in
+                </Button>
             </div>
             
         </div>
@@ -229,11 +287,16 @@ const Account: React.FC = () => {
                 {/*<div>uid:{uid}</div>*/}
             </div>
             
-            <Button variant="outlined" onClick={handleSignOut}>Sign out</Button>
+            <Button 
+                variant="outlined" 
+                size="small"
+                onClick={handleSignOut}
+                sx={{ color:"#4758DC", border:"1px solid #4758DC", '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}}}
+            >
+                Log out
+            </Button>
         </div>
     )
-
-
 
   return (
     <div className="account">{signedIn ? userDetails() : signInForm()}</div>
