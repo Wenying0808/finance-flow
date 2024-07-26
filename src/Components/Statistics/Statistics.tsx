@@ -1,10 +1,15 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import './Statistics.css';
 import { Button, IconButton, Modal } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MonthCalendar } from '@mui/x-date-pickers/MonthCalendar';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { Expense } from '../Expenses/ExpenseInterface';
 import AddExpensePage from '../Expenses/AddExpense';
 import EditExpensePage from '../Expenses/EditExpense';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { MdFastfood  } from "react-icons/md";
 import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
 import { BsSuitcaseFill } from "react-icons/bs";
@@ -39,6 +44,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
   const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
 
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
+  const [isMonthMenuOpen, setMonthMenuOpen] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -87,6 +93,9 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
     fetchExpenses(); //call the fetch function
   }, [uid]);
 
+  const handleMonthMenu = () => {
+    setMonthMenuOpen(!isMonthMenuOpen);
+  }
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -153,20 +162,25 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
     return expenses.filter((expense) => dayjs(expense.date).format('MM YYYY') === formattedSelectedMonthAndYear);
   },[expenses, selectedMonthAndYear, formattedSelectedMonthAndYear]);
 
-  const handlePreviousMonth = () => {
+  const handlePreviousYear = () => {
     setSelectedMonthAndYear((prevState) => ({
       ...prevState, 
-      month: prevState.month === 0 ? 11 : prevState.month - 1,
-      year: prevState.month === 0 ? prevState.year - 1 : prevState.year,
-    })); // january is 0; December is 11
-    
-  }; 
+      month: prevState.month,
+      year: prevState.year - 1,
+    }));
+  };
+  const handleNextYear = () => {
+    setSelectedMonthAndYear((prevState) => ({
+      ...prevState, 
+      month: prevState.month,
+      year: prevState.year + 1,
+    }));
+  };
 
-  const handleNextMonth = () => {
+  const handleMonthSelect = (month: number) => {
     setSelectedMonthAndYear((prevState) => ({
-      ...prevState, 
-      month: prevState.month === 11 ? 0 : prevState.month + 1,
-      year: prevState.month === 11 ? prevState.year + 1 : prevState.year,
+      ...prevState,
+      month,
     }));
   };
 
@@ -223,87 +237,104 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   
   return (
-    <div className="statsitcs-content">
+    <>
       <div className="month-control">
-        <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="previous month" onClick={handlePreviousMonth}>
-          <GrFormPreviousLink />
+        <span className="month-control-header">
+          {dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}
+        </span>
+        <IconButton onClick={handleMonthMenu}>
+          <KeyboardArrowDownIcon/>
         </IconButton>
-        <span className="month-control-header">{dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}</span>
-        <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="next month" onClick={handleNextMonth}>
-          <GrFormNextLink />
-        </IconButton>
       </div>
-      <div className="summary">
-        <div className="summary-info">
-          <div className="summary-info-header">Budget: </div>
-          <div className="summary-info-value budget">{currencySymbol}{budget}</div>
+      {isMonthMenuOpen && (
+          <div className="month-menu">
+            <div className='year-control'>
+              <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="previous month" onClick={handlePreviousYear}>
+              <GrFormPreviousLink />
+              </IconButton>
+              <span className="year-control-header">{dayjs().year(selectedMonthAndYear.year).format('YYYY')}</span>
+              <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="next month" onClick={handleNextYear}>
+                <GrFormNextLink />
+              </IconButton>
+            </div>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <MonthCalendar onChange={(newDate) => handleMonthSelect((newDate as Dayjs).month())}/>
+            </LocalizationProvider>
+          </div>
+        )}
+      <div className="statsitcs-content">
+        <div className="summary">
+          <div className="summary-info">
+            <div className="summary-info-header">Budget: </div>
+            <div className="summary-info-value budget">{currencySymbol}{budget}</div>
+          </div>
+          <div className="summary-info">
+            <div className="summary-info-header">Monthly Expense: </div>
+            <div className="summary-info-value expense">{currencySymbol}{monthlyTotalExpense}</div>
+          </div>
+          <div className="summary-info">
+            <div className="summary-info-header">Monthly Balance: </div>
+            <div className="summary-info-value balance">{currencySymbol}{monthlyBalance}</div>
+          </div>
+    
         </div>
-        <div className="summary-info">
-          <div className="summary-info-header">Monthly Expense: </div>
-          <div className="summary-info-value expense">{currencySymbol}{monthlyTotalExpense}</div>
+        <div className="summary-log">
+          <div className="summary-log-list">
+            {filteredExpenses.map((expense, index) => (
+                <div className="log-card" key={index} >
+                  <div className="log-card-date">{dayjs(expense.date).format('DD/MM/YYYY')}</div>
+                  <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
+                  <div className="log-card-description">{expense.description}</div>
+                  <div className="log-card-amount">{currencySymbol}{expense.amount}</div>
+                  <IconButton 
+                    size="small" 
+                    sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} 
+                    onClick={()=>handleDeleteExpense(expense.id)}>
+                    <RiDeleteBinLine/>
+                  </IconButton>
+                  {/*
+                  <IconButton size="small" onClick={() => handleOpenEditModal(filteredExpenses[index])}><RiEdit2Line/></IconButton>
+                  */}
+                </div>
+              ))}
+          </div>
+          <div className="summary-log-button">
+            <Button 
+              variant="contained" 
+              sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+              onClick={handleOpenModal}
+            >
+              Add Expense
+            </Button>
+            {/*<div>uid:{uid}</div>*/}
+          </div>
         </div>
-        <div className="summary-info">
-          <div className="summary-info-header">Monthly Balance: </div>
-          <div className="summary-info-value balance">{currencySymbol}{monthlyBalance}</div>
-        </div>
-  
-      </div>
-      <div className="summary-log">
-        <div className="summary-log-list">
-          {filteredExpenses.map((expense, index) => (
-              <div className="log-card" key={index} >
-                <div className="log-card-date">{dayjs(expense.date).format('DD/MM/YYYY')}</div>
-                <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
-                <div className="log-card-description">{expense.description}</div>
-                <div className="log-card-amount">{currencySymbol}{expense.amount}</div>
-                <IconButton 
-                  size="small" 
-                  sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} 
-                  onClick={()=>handleDeleteExpense(expense.id)}>
-                  <RiDeleteBinLine/>
-                </IconButton>
-                {/*
-                <IconButton size="small" onClick={() => handleOpenEditModal(filteredExpenses[index])}><RiEdit2Line/></IconButton>
-                */}
-              </div>
-            ))}
-        </div>
-        <div className="summary-log-button">
-          <Button 
-            variant="contained" 
-            sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
-            onClick={handleOpenModal}
-          >
-            Add Expense
-          </Button>
-          {/*<div>uid:{uid}</div>*/}
-        </div>
-      </div>
 
-      <Modal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="add-expense-modal"
-      >
-        <AddExpensePage 
-          onSave={handleSaveExpense} 
-          onCancel={handleCloseModal}  
-        />
-      </Modal>
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          aria-labelledby="add-expense-modal"
+        >
+          <AddExpensePage 
+            onSave={handleSaveExpense} 
+            onCancel={handleCloseModal}  
+          />
+        </Modal>
 
-      <Modal
-        open={editModalOpen}
-        onClose={handleCloseEditModal}
-        aria-labelledby="edit-expense-modal"
-      >
-        <EditExpensePage 
-          expense={editingExpense} 
-          onSave={handleSaveExpense} 
-          onCancel={handleCloseEditModal} 
-          onDeleteExpense={handleDeleteExpense} 
-        />
-      </Modal>
-    </div>
+        <Modal
+          open={editModalOpen}
+          onClose={handleCloseEditModal}
+          aria-labelledby="edit-expense-modal"
+        >
+          <EditExpensePage 
+            expense={editingExpense} 
+            onSave={handleSaveExpense} 
+            onCancel={handleCloseEditModal} 
+            onDeleteExpense={handleDeleteExpense} 
+          />
+        </Modal>
+      </div>
+    </>
   );
 };
 
