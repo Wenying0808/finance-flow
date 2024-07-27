@@ -265,17 +265,32 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
                   .year(selectedMonthAndYear.year)}
                   onChange={(newDate) => handleMonthSelect((newDate as Dayjs).month())}
                   sx={{
-                    transform: 'scale(0.8)', // Scale down the calendar
-                    width: '240px', // Set specific width
-                    height: 'auto', // Adjust height as needed
+                    transform: 'scale(0.8)', 
+                    width: '240px', 
+                    height: 'auto', 
                     '& .MuiPickersCalendarHeader-root': {
-                      fontSize: '0.8rem', // Adjust header font size
+                      fontSize: '0.8rem', 
                     },
                     '& .MuiPickersDay-root': {
-                      fontSize: '0.8rem', // Adjust day font size
-                      width: '32px', // Adjust day size
-                      height: '32px', // Adjust day size
+                      fontSize: '0.8rem', 
+                      width: '32px', 
+                      height: '32px', 
                     },
+                    '& .MuiPickersMonth-root': {
+                      color: '#000', // Month text color
+                    },
+                    '& .MuiPickersMonth-monthButton': {
+                        '&.Mui-selected': {
+                          backgroundColor: '#4758DC', // Selected month background color
+                          color: '#fff', // Selected month text color
+                        },
+                        '&.Mui-selected:hover': {
+                          backgroundColor: '#3747AC', // Hover background color for selected month
+                        },
+                        '&:hover': {
+                          backgroundColor: 'rgba(71, 88, 220, 0.1)', // Hover background color
+                        },
+                    }
                   }}
                 />
             </LocalizationProvider>
