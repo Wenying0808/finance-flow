@@ -47,7 +47,7 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
     }
     
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(Number(e.target.value)); 
+        setAmount(parseFloat(e.target.value)); 
     }
 
      //check if all inputs have value (not empty)
@@ -131,14 +131,14 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
                     onChange={handleAmountChange}
                     required
                     type="number"
-                    inputProps={{ step: "any" }} 
+                    inputProps={{ 
+                        step: "0.01", // Allows two decimal places
+                        lang: "en-US" // Ensures period as decimal separator
+                    }} 
                     InputProps={{
                         startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
                       }} 
-                />
-
-               
-                
+                />  
             </div>
             <div className="add-expense-buttons">
                 <Button variant="outlined" sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} onClick={onCancel}>Cancel</Button>
