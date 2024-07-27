@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import './Statistics.css';
 import { Button, IconButton, Modal } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MonthCalendar } from '@mui/x-date-pickers/MonthCalendar';
@@ -238,12 +239,12 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
   
   return (
     <>
-      <div className="month-control">
-        <span className="month-control-header">
+      <div className="month-year-control">
+        <span className="month-year-control-header">
           {dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}
         </span>
         <IconButton onClick={handleMonthMenu}>
-          <KeyboardArrowDownIcon/>
+        {isMonthMenuOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
         </IconButton>
       </div>
       {isMonthMenuOpen && (
@@ -258,7 +259,25 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
               </IconButton>
             </div>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <MonthCalendar onChange={(newDate) => handleMonthSelect((newDate as Dayjs).month())}/>
+                <MonthCalendar 
+                  value={dayjs()
+                  .month(selectedMonthAndYear.month)
+                  .year(selectedMonthAndYear.year)}
+                  onChange={(newDate) => handleMonthSelect((newDate as Dayjs).month())}
+                  sx={{
+                    transform: 'scale(0.8)', // Scale down the calendar
+                    width: '240px', // Set specific width
+                    height: 'auto', // Adjust height as needed
+                    '& .MuiPickersCalendarHeader-root': {
+                      fontSize: '0.8rem', // Adjust header font size
+                    },
+                    '& .MuiPickersDay-root': {
+                      fontSize: '0.8rem', // Adjust day font size
+                      width: '32px', // Adjust day size
+                      height: '32px', // Adjust day size
+                    },
+                  }}
+                />
             </LocalizationProvider>
           </div>
         )}
