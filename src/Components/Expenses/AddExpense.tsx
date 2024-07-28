@@ -2,7 +2,8 @@ import React, {useState, useEffect, useCallback} from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, InputAdornment, IconButton} from '@mui/material';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import { toDateObject, toDateString } from "./DateHandling";
 import { Categories } from "./Categories";
 import { SelectChangeEvent } from "@mui/material";
 
@@ -27,20 +28,20 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
     const [description, setDescription] = useState<string>('');
     const [category, setCategory]= useState<string>('');
     const [amount, setAmount] = useState<number>(0);
-    const [date, setDate] = useState<string>('');
+    const [date, setDate] = useState<string>(toDateString(dayjs()));
     const [isSaveEnabled, setIsSaveEnabled] = useState<boolean>(false);
    
-    //handle input changes
-    const handleDateChange = (newDate: string | null) => {
+    // handle input changes
+    const handleDateChange = (newDate: Dayjs | null) => {
         if (newDate) {
-            setDate(newDate);
+            setDate(toDateString(newDate));
             console.log("newDate:", newDate);
         }
-    }
+    };
 
     const handleCategoryChange = (e: SelectChangeEvent) => {
         setCategory(e.target.value as string);
-    }
+    };
 
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(e.target.value as string);
@@ -48,14 +49,14 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
     
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAmount(parseFloat(e.target.value)); 
-    }
+    };
 
-     //check if all inputs have value (not empty)
+    // check if all inputs have value (not empty)
     const useCheckInputValidity = (date: string, category: string, description: string, amount: number, ) => {
         return useCallback(() => {
           return description.trim() !== '' && category.trim() !== '' && amount > 0 && date !== '';
         }, [description, category, amount, date]);
-      };
+    };
     const isInputValid = useCheckInputValidity(date, category, description, amount);
 
     //address async updates from the inputs
@@ -68,7 +69,7 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
     const handleSave = () => {
         const newExpense: Expense = {
             id: uuidv4(),
-            date: dayjs(date).toISOString(),
+            date: date,
             category,
             description,
             amount,  
@@ -93,7 +94,7 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Date"
-                            value={date}
+                            value={toDateObject(date)}
                             onChange={handleDateChange}
                         />
                     </LocalizationProvider>

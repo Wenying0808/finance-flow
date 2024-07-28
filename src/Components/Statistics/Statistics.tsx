@@ -6,11 +6,11 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MonthCalendar } from '@mui/x-date-pickers/MonthCalendar';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { Expense } from '../Expenses/ExpenseInterface';
 import AddExpensePage from '../Expenses/AddExpense';
 import EditExpensePage from '../Expenses/EditExpense';
 import dayjs, { Dayjs } from 'dayjs';
+import { toDateObject, toDateString, sortExpensesByDate } from "../Expenses/DateHandling";
 import { MdFastfood  } from "react-icons/md";
 import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
 import { BsSuitcaseFill } from "react-icons/bs";
@@ -69,12 +69,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             fetchedExpenses.push( {id: doc.id, ...doc.data()} as Expense );
           })
           // Sort fetched expenses by date from latest to oldest
-          fetchedExpenses.sort((a, b) => {
-            // convert the Dayjs object to a native Date object before calling getTime().
-            const dateA = typeof a.date === 'string' ? new Date(a.date) : a.date.toDate();
-            const dateB = typeof b.date === 'string' ? new Date(b.date) : b.date.toDate();
-            return dateB.getTime() - dateA.getTime();
-          });
+          fetchedExpenses.sort(sortExpensesByDate);
 
           setExpenses(fetchedExpenses);
           console.log("fetched expenses", fetchedExpenses);
@@ -129,32 +124,24 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
       const userDocRef = doc(db, "Users", uid);
       const expenseRef = doc(collection(userDocRef, "expenses"), expense.id);
 
-      // Ensure date is always a string before saving to Firestore
-      const expenseToSave = {
-        ...expense,
-        date: dayjs.isDayjs(expense.date) ? expense.date.toISOString() : expense.date
-    };
-
       // update existing expens or add new expense
-      await setDoc(expenseRef, expenseToSave);
+      await setDoc(expenseRef, expense);
 
       // update local state
       setExpenses(prevExpenses => {
-        const updatedExpense = {
-          ...expense,
-          date: dayjs.isDayjs(expense.date) ? expense.date.toISOString() : expense.date
-        };
-        const index = prevExpenses.findIndex(e => e.id === expense.id);    
+
+        const updatedExpenses = [...prevExpenses];
+        const index = updatedExpenses.findIndex(e => e.id === expense.id);   
+        
         if (index !== -1) {
         // update exsiting expense (index exist)
-          const updatedExpenses = [...prevExpenses];
-          updatedExpenses[index] = updatedExpense;
-          return updatedExpenses;
+          updatedExpenses[index] = expense;
         }
         else {
         // add new expense
-        return [...prevExpenses, updatedExpense]
+        updatedExpenses.push(expense);
         }
+        return updatedExpenses.sort(sortExpensesByDate);
        
       });
       // Close the modals
@@ -226,12 +213,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
   };
  
   function sortExpenseByDate(expenses: Expense[]) {
-    return [...expenses].sort((a, b) => {
-      // convert the Dayjs object to a native Date object before calling getTime().
-      const dateA = typeof a.date === 'string' ? new Date(a.date) : a.date.toDate();
-      const dateB = typeof b.date === 'string' ? new Date(b.date) : b.date.toDate();
-      return dateB.getTime() - dateA.getTime();
-    });
+    return [...expenses].sort(sortExpensesByDate);
   }
 
 
@@ -253,11 +235,18 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
     const sortedFilteredExpenses = sortExpenseByDate(filteredExpensesByMonthAndYear);
 
     //sum the expense whenever expense changes
-    const sumOfMonthlyExpense = sortedFilteredExpenses.reduce((accumulation, newExpense)=> accumulation + newExpense.amount, 0 ); //inital accumultation is 0
+    const sumOfMonthlyExpense = sortedFilteredExpenses.reduce(
+      (accumulation, newExpense) => accumulation + newExpense.amount, 
+      0 
+    ); //inital accumultation is 0
   
-    setMonthlyTotalExpense(sumOfMonthlyExpense);
+    // round to 2 decimal places
+    const roundedSumOfMonthlyExpenses = Number(sumOfMonthlyExpense.toFixed(2));
+    setMonthlyTotalExpense(roundedSumOfMonthlyExpenses);
 
-    setMonthlyBalance(budget-sumOfMonthlyExpense);
+    const roundedMonthlyBlance = Number((budget - roundedSumOfMonthlyExpenses).toFixed(2))
+
+    setMonthlyBalance(roundedMonthlyBlance);
 
   }, [expenses, budget, formattedSelectedMonthAndYear]);
 
@@ -341,7 +330,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
           <div className="summary-log-list">
             {filteredExpenses.map((expense, index) => (
                 <div className="log-card" key={index} >
-                  <div className="log-card-date">{dayjs(expense.date).format('DD/MM/YYYY')}</div>
+                  <div className="log-card-date">{toDateObject(expense.date).format('DD/MM')}</div>
                   <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
                   <div className="log-card-description">{expense.description}</div>
                   <div className="log-card-amount">{currencySymbol}{expense.amount}</div>

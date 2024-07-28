@@ -8,6 +8,7 @@ import './EditExpense.css';
 import { Expense } from "./ExpenseInterface";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import dayjs, { Dayjs } from "dayjs";
+import { toDateObject, toDateString } from "./DateHandling";
 import { useUserContext } from "../../Contexts/UserContextProvider";
 
 
@@ -24,7 +25,7 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
 
     const [formData, setFormData] = useState<Expense>({
         id: expense ? expense.id : '',
-        date: expense ? dayjs(expense.date) : dayjs(),
+        date: expense ? expense.date : toDateString(dayjs()),
         category: expense ? expense.category : '',
         description: expense ? expense.description : '',
         amount: expense ? expense.amount : 0,
@@ -35,8 +36,7 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
         if (newDate){
             setFormData((prevData) => ({
                     ...prevData,
-                    date: newDate
-
+                    date: toDateString(newDate)
             }));
         }
     };
@@ -55,11 +55,7 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
 
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault();
-        const submittedData = {
-            ...formData,
-            date: (formData.date as Dayjs).toISOString() // Convert back to ISO string
-        };
-        onSave(submittedData);
+        onSave(formData);
         onCancel();
     };
 
@@ -78,7 +74,7 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Date"
-                            value={formData.date as Dayjs}
+                            value={toDateObject(formData.date)}
                             onChange={handleDateChange}
                         />
                     </LocalizationProvider>
