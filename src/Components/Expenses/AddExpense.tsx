@@ -141,8 +141,21 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
                 />  
             </div>
             <div className="add-expense-buttons">
-                <Button variant="outlined" sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} onClick={onCancel}>Cancel</Button>
-                <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave} disabled={!isSaveEnabled}>Save</Button>
+                <Button 
+                    variant="outlined" 
+                    sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} 
+                    onClick={onCancel}
+                >
+                    Cancel
+                </Button>
+                <Button 
+                    variant="contained" 
+                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+                    onClick={handleSave} 
+                    disabled={!isSaveEnabled}
+                >
+                    Save
+                </Button>
             </div>
             
 

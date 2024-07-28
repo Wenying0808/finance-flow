@@ -7,7 +7,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import './EditExpense.css';
 import { Expense } from "./ExpenseInterface";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useUserContext } from "../../Contexts/UserContextProvider";
 
 
@@ -24,20 +24,21 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
 
     const [formData, setFormData] = useState<Expense>({
         id: expense ? expense.id : '',
-        date: expense ? expense.date : '',
+        date: expense ? dayjs(expense.date) : dayjs(),
         category: expense ? expense.category : '',
         description: expense ? expense.description : '',
         amount: expense ? expense.amount : 0,
     });
 
     
-    const handleDateChange = (date: string | null) => {
-        setFormData( (prevData) => {
-            return {
-                ...prevData,
-                date: date ? dayjs(date).toISOString() : prevData.date
-            }
-        } );
+    const handleDateChange = (newDate: dayjs.Dayjs | null) => {
+        if (newDate){
+            setFormData((prevData) => ({
+                    ...prevData,
+                    date: newDate
+
+            }));
+        }
     };
     const handleCategoryChange = (e: SelectChangeEvent<string>) => {
         const { value } = e.target; //const targetValue = event.target.value;
@@ -54,19 +55,12 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
 
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault();
-        onSave(formData);
+        const submittedData = {
+            ...formData,
+            date: (formData.date as Dayjs).toISOString() // Convert back to ISO string
+        };
+        onSave(submittedData);
         onCancel();
-    };
-
-    const handleDelete = (expense: Expense) => {
-        onDeleteExpense(expense.id);
-        onCancel();
-    };
-
-    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (expense) {
-            handleDelete(expense);
-        }
     };
 
 
@@ -84,7 +78,7 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Date"
-                            value={formData.date}
+                            value={formData.date as Dayjs}
                             onChange={handleDateChange}
                         />
                     </LocalizationProvider>
@@ -125,18 +119,42 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                     value = {formData.amount}
                     onChange={handleAmountChange}
                     required
-
+                    inputProps={{ 
+                        step: "0.01",
+                        lang: "en-US"
+                    }}
                     InputProps={{
                         startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
-                      }} 
+                    }} 
                 />
                 
             </form>
 
             <div className="edit-expense-buttons">
-                <Button variant="contained" color="error" startIcon={<RiDeleteBinLine />} onClick={handleDeleteClick}>Delete</Button>
-                <Button variant="outlined" sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} onClick={onCancel}>Cancel</Button>
-                <Button variant="contained" type='submit' sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} disabled ={!expense} onClick={handleSubmitForm}>Save</Button>
+                <Button 
+                    variant="contained" 
+                    color="error" 
+                    startIcon={<RiDeleteBinLine />} 
+                    onClick={() => onDeleteExpense(formData.id)}
+                >
+                    Delete
+                </Button>
+                <Button 
+                    variant="outlined" 
+                    sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} 
+                    onClick={onCancel}
+                >
+                    Cancel
+                </Button>
+                <Button 
+                    variant="contained" 
+                    type='submit' 
+                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+                    disabled ={!expense} 
+                    onClick={handleSubmitForm}
+                >
+                    Save
+                </Button>
             </div>
             
 

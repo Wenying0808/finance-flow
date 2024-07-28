@@ -69,7 +69,12 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             fetchedExpenses.push( {id: doc.id, ...doc.data()} as Expense );
           })
           // Sort fetched expenses by date from latest to oldest
-          fetchedExpenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+          fetchedExpenses.sort((a, b) => {
+            // convert the Dayjs object to a native Date object before calling getTime().
+            const dateA = typeof a.date === 'string' ? new Date(a.date) : a.date.toDate();
+            const dateB = typeof b.date === 'string' ? new Date(b.date) : b.date.toDate();
+            return dateB.getTime() - dateA.getTime();
+          });
 
           setExpenses(fetchedExpenses);
           console.log("fetched expenses", fetchedExpenses);
@@ -122,27 +127,41 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
   const handleSaveExpense = async (expense: Expense) => {
     try{
       const userDocRef = doc(db, "Users", uid);
+      const expenseRef = doc(collection(userDocRef, "expenses"), expense.id);
 
-      if (editingExpense) {
-        //edit existing expense
-        const updatedExpenses = expenses.map((log) => log.id === editingExpense.id ? {...log, ...expense} : log);
-        setExpenses(updatedExpenses);
-        handleCloseEditModal();
+      // Ensure date is always a string before saving to Firestore
+      const expenseToSave = {
+        ...expense,
+        date: dayjs.isDayjs(expense.date) ? expense.date.toISOString() : expense.date
+    };
 
-      } else {
-        //add new expense
-        //create a new expense document with the generated ID from uuid4()
-        const expenseRef = doc(collection(userDocRef, "expenses"), expense.id);
+      // update existing expens or add new expense
+      await setDoc(expenseRef, expenseToSave);
 
-        //Add expense data to expense doc
-        await setDoc(expenseRef, expense);
+      // update local state
+      setExpenses(prevExpenses => {
+        const updatedExpense = {
+          ...expense,
+          date: dayjs.isDayjs(expense.date) ? expense.date.toISOString() : expense.date
+        };
+        const index = prevExpenses.findIndex(e => e.id === expense.id);    
+        if (index !== -1) {
+        // update exsiting expense (index exist)
+          const updatedExpenses = [...prevExpenses];
+          updatedExpenses[index] = updatedExpense;
+          return updatedExpenses;
+        }
+        else {
+        // add new expense
+        return [...prevExpenses, updatedExpense]
+        }
+       
+      });
+      // Close the modals
+      setModalOpen(false);
+      setEditModalOpen(false);
 
-        const updatedExpenses = [...expenses, expense];
-        const sortedUpdatedExpenses = updatedExpenses.sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
- 
-        setExpenses(sortedUpdatedExpenses); // add new on the top of the list
-        handleCloseModal();
-      }
+      console.log("Expense saved successfully:", expense);
 
     } catch(error: any) {
       console.error("Error saving expense:", error.message);
@@ -157,7 +176,6 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
   // Filter expenses based on selected month & year
   const formattedSelectedMonthAndYear = dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY');
 
-  // used 
   const filteredExpenses = useMemo(() => {
     if(!expenses.length) return [];
     return expenses.filter((expense) => dayjs(expense.date).format('MM YYYY') === formattedSelectedMonthAndYear);
@@ -189,6 +207,8 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
     const updatedExpenses = expenses.filter((expense) => expense.id !== expenseId);
     setExpenses(updatedExpenses);
     deleteExpenseFromFirestore(expenseId);
+
+    setEditModalOpen(false);
   };
 
   const deleteExpenseFromFirestore = async(expenseId: string) => {
@@ -206,7 +226,12 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
   };
  
   function sortExpenseByDate(expenses: Expense[]) {
-    return [...expenses].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return [...expenses].sort((a, b) => {
+      // convert the Dayjs object to a native Date object before calling getTime().
+      const dateA = typeof a.date === 'string' ? new Date(a.date) : a.date.toDate();
+      const dateB = typeof b.date === 'string' ? new Date(b.date) : b.date.toDate();
+      return dateB.getTime() - dateA.getTime();
+    });
   }
 
 
@@ -326,9 +351,12 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
                     onClick={()=>handleDeleteExpense(expense.id)}>
                     <RiDeleteBinLine/>
                   </IconButton>
-                  {/*
-                  <IconButton size="small" onClick={() => handleOpenEditModal(filteredExpenses[index])}><RiEdit2Line/></IconButton>
-                  */}
+                  <IconButton 
+                    size="small" 
+                    onClick={() => handleOpenEditModal(expense)}
+                  >
+                    <RiEdit2Line/>
+                  </IconButton>
                 </div>
               ))}
           </div>
