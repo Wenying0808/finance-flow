@@ -338,28 +338,34 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
           </div>
         </div>
         <div className="summary-log">
-          <div className="summary-log-list">
-            {filteredExpenses.map((expense, index) => (
-                <div className="log-card" key={index} >
-                  <div className="log-card-date">{toDateObject(expense.date).format('DD/MM')}</div>
-                  <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
-                  <div className="log-card-description">{expense.description}</div>
-                  <div className="log-card-amount">{currencySymbol}{expense.amount}</div>
-                  <IconButton 
-                    size="small" 
-                    sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} 
-                    onClick={()=>handleDeleteExpense(expense.id)}>
-                    <RiDeleteBinLine/>
-                  </IconButton>
-                  <IconButton 
-                    size="small" 
-                    onClick={() => handleOpenEditModal(expense)}
-                  >
-                    <RiEdit2Line/>
-                  </IconButton>
-                </div>
-              ))}
-          </div>
+          {viewMode === 'table' 
+          ?
+            <div className="summary-log-list">
+              {filteredExpenses.map((expense, index) => (
+                  <div className="log-card" key={index} >
+                    <div className="log-card-date">{toDateObject(expense.date).format('DD/MM')}</div>
+                    <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
+                    <div className="log-card-description">{expense.description}</div>
+                    <div className="log-card-amount">{currencySymbol}{expense.amount}</div>
+                    <IconButton 
+                      size="small" 
+                      sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} 
+                      onClick={()=>handleDeleteExpense(expense.id)}>
+                      <RiDeleteBinLine/>
+                    </IconButton>
+                    <IconButton 
+                      size="small" 
+                      onClick={() => handleOpenEditModal(expense)}
+                    >
+                      <RiEdit2Line/>
+                    </IconButton>
+                  </div>
+                ))}
+            </div>
+          :
+            <div className="summary-log-chart"></div>
+          }
+          
           <div className="summary-log-button">
             <Button 
               variant="contained" 
