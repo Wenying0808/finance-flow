@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/finance-flow/static/css/main.2882d489.css",
-    "main.js": "/finance-flow/static/js/main.9d748c6b.js",
+    "main.css": "/finance-flow/static/css/main.8ef0b013.css",
+    "main.js": "/finance-flow/static/js/main.5197ffd5.js",
     "index.html": "/finance-flow/index.html",
-    "main.2882d489.css.map": "/finance-flow/static/css/main.2882d489.css.map",
-    "main.9d748c6b.js.map": "/finance-flow/static/js/main.9d748c6b.js.map"
+    "main.8ef0b013.css.map": "/finance-flow/static/css/main.8ef0b013.css.map",
+    "main.5197ffd5.js.map": "/finance-flow/static/js/main.5197ffd5.js.map"
   },
   "entrypoints": [
-    "static/css/main.2882d489.css",
-    "static/js/main.9d748c6b.js"
+    "static/css/main.8ef0b013.css",
+    "static/js/main.5197ffd5.js"
   ]
 }
