@@ -13,6 +13,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import { toDateObject, toDateString, sortExpensesByDate } from "../Expenses/DateHandling";
 import { MdFastfood  } from "react-icons/md";
 import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
+import { FaBook } from "react-icons/fa6";
+import { IoGameController } from "react-icons/io5";
 import { BsSuitcaseFill } from "react-icons/bs";
 import { IconBase, IconType } from 'react-icons';
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
@@ -31,6 +33,8 @@ interface CategoryIconMap {
 }
 
 const categoryIconMap: CategoryIconMap = {
+  'Education': FaBook,
+  'Entertainment & Recreation': IoGameController,
   'Food & Drinks': MdFastfood,
   'Health & Care': FaHeart,
   'Holidays': BsSuitcaseFill,
