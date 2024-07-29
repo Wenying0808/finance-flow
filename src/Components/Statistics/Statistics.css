@@ -19,7 +19,7 @@
     top: 0;
     display: flex;
     width: 100%;
-    padding: 16px 24px;
+    padding: 8px;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -67,10 +67,10 @@
 
 .summary{
     position: fixed;
-    top: 73px;
+    top: 57px;
     display: flex;
     width: 100%;
-    padding: var(--Button-Padding-LR-Large, 16px);
+    padding: 12px;
 
     flex-direction: column;
     align-items: center;
@@ -115,9 +115,13 @@
     color: var(--Salem, #058F23);
 }
 
+.data-view-control{
+    margin-top: 8px;
+}
+
 .summary-log-list{
     position: absolute;
-    top: 173px;
+    top: 194px;
     left: 0;
     bottom: 158px; 
     
@@ -219,7 +223,7 @@
    
     display: flex;
     width: 100%;
-    padding: 24px 16px;
+    padding: 16px;
 
     justify-content: center;
     align-items: center;

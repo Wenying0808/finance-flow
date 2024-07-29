@@ -6,6 +6,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MonthCalendar } from '@mui/x-date-pickers/MonthCalendar';
+import CustomToggleButton from '../ToggleButton/CustomToggleButton';
 import { Expense } from '../Expenses/ExpenseInterface';
 import AddExpensePage from '../Expenses/AddExpense';
 import EditExpensePage from '../Expenses/EditExpense';
@@ -50,6 +51,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [isMonthMenuOpen, setMonthMenuOpen] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<'table' | 'chart'>('table');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -100,7 +102,10 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   const handleMonthMenu = () => {
     setMonthMenuOpen(!isMonthMenuOpen);
-  }
+  };
+  const handleViewModeChange = (newView: 'table' | 'chart') => {
+    setViewMode(newView);
+  };
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -328,7 +333,9 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             <div className="summary-info-header">Monthly Balance: </div>
             <div className="summary-info-value balance">{currencySymbol}{monthlyBalance}</div>
           </div>
-    
+          <div className="data-view-control">
+            <CustomToggleButton view={viewMode} onViewChange={handleViewModeChange}/>
+          </div>
         </div>
         <div className="summary-log">
           <div className="summary-log-list">
