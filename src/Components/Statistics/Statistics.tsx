@@ -34,7 +34,7 @@ interface CategoryIconMap {
 
 const categoryIconMap: CategoryIconMap = {
   'Education': FaBook,
-  'Entertainment & Recreation': IoGameController,
+  'Entertainment': IoGameController,
   'Food & Drinks': MdFastfood,
   'Health & Care': FaHeart,
   'Holidays': BsSuitcaseFill,
