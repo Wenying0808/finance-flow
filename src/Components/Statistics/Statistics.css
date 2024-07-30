@@ -139,6 +139,7 @@
     bottom: 158px; 
     
     width: 100%;
+    overflow-y: auto;
 }
 
 .log-card{

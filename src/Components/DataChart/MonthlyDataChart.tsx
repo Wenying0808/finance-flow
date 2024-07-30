@@ -4,6 +4,8 @@ import { Expense } from "../Expenses/ExpenseInterface";
 import { Categories } from "../Expenses/Categories";
 import { ChartContainer } from '@mui/x-charts/ChartContainer';
 import { BarPlot } from '@mui/x-charts/BarChart';
+import { PiePlot } from "@mui/x-charts";
+import { ChartsYAxis, ChartsXAxis } from '@mui/x-charts'; 
 
 interface monthylyDataChartProps {
     expenses: Expense[];    
@@ -22,33 +24,62 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
 
     
     // Transform the sumOfEachCategory object into arrays suitable for BarPlot {data: xx, label:xx}
-    /* const chartData = Object.entries(sumOfEachCategory).map(([category, amount]) => {
+    const chartDataSet = Object.entries(sumOfEachCategory).map(([category, amount], index) => {
         const categoryObj = Categories.find(c => c.value === category);
         return {
-            category,
-            amount,
-            color: categoryObj ? categoryObj.color : '#000000'
+            id: Number(`${index}`),
+            value: amount,
+            label: category,
+            /*color: categoryObj ? categoryObj.color : '#000000'*/
         }
     });
-    */
+    
+    /*console.log(chartDataSet);*/
     /*console.log(sumOfEachCategory);*/
     /*console.log(Object.entries(sumOfEachCategory));*/
+
     const chartCategory = Object.keys(sumOfEachCategory);
     const chartData = Object.values(sumOfEachCategory);
+    const categoryColor = Categories.map(category => category.color);
+
+    console.log(categoryColor);
     console.log(chartData, chartCategory);
 
     return(
         <div className="monthly-data-chart">
             <ChartContainer
                 width={400}
-                height={250}
+                height={300}
                 series={[
-                    { data: chartData, label: 'Expenses', type: 'bar' }
+                    { 
+                        data: chartData, 
+                        label: 'Expenses', 
+                        type: 'bar', 
+                    }
                 ]}
-                xAxis={[{ data: chartCategory, scaleType: 'band' }]}
+                xAxis={[
+                    { 
+                        data: chartCategory, 
+                        scaleType: 'band' 
+                    }
+                ]}
             >
                 <BarPlot />
-            </ChartContainer>   
+                <ChartsXAxis />
+                <ChartsYAxis />
+            </ChartContainer>
+            <ChartContainer
+                width={400}
+                height={300}
+                series={[
+                    { 
+                        data: chartDataSet, 
+                        type: 'pie'
+                    }
+                ]}
+            >
+                <PiePlot />
+            </ChartContainer> 
         </div>
     );
 };
