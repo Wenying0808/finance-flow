@@ -22,29 +22,34 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
 
     
     // Transform the sumOfEachCategory object into arrays suitable for BarPlot {data: xx, label:xx}
+    /* const chartData = Object.entries(sumOfEachCategory).map(([category, amount]) => {
+        const categoryObj = Categories.find(c => c.value === category);
+        return {
+            category,
+            amount,
+            color: categoryObj ? categoryObj.color : '#000000'
+        }
+    });
+    */
     /*console.log(sumOfEachCategory);*/
     /*console.log(Object.entries(sumOfEachCategory));*/
-    const chartData = Object.entries(sumOfEachCategory).map(([key, value]) => (
-        {
-            label: key, 
-            data: value
-        }
-    ));
-    console.log(chartData);
+    const chartCategory = Object.keys(sumOfEachCategory);
+    const chartData = Object.values(sumOfEachCategory);
+    console.log(chartData, chartCategory);
 
     return(
         <div className="monthly-data-chart">
-            {/*
             <ChartContainer
-                width={500}
-                height={400}
+                width={400}
+                height={250}
+                series={[
+                    { data: chartData, label: 'Expenses', type: 'bar' }
+                ]}
+                xAxis={[{ data: chartCategory, scaleType: 'band' }]}
             >
-                <BarPlot 
-                    
-                />
+                <BarPlot />
             </ChartContainer>
-            */
-            }
+            
         </div>
     );
 };
