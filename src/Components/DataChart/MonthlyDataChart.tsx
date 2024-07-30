@@ -48,8 +48,7 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
                 xAxis={[{ data: chartCategory, scaleType: 'band' }]}
             >
                 <BarPlot />
-            </ChartContainer>
-            
+            </ChartContainer>   
         </div>
     );
 };
