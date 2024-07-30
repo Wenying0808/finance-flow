@@ -10,6 +10,7 @@ import CustomToggleButton from '../ToggleButton/CustomToggleButton';
 import { Expense } from '../Expenses/ExpenseInterface';
 import AddExpensePage from '../Expenses/AddExpense';
 import EditExpensePage from '../Expenses/EditExpense';
+import MonthlyDataChart from '../DataChart/MonthlyDataChart';
 import dayjs, { Dayjs } from 'dayjs';
 import { toDateObject, toDateString, sortExpensesByDate } from "../Expenses/DateHandling";
 import { MdFastfood  } from "react-icons/md";
@@ -363,7 +364,9 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
                 ))}
             </div>
           :
-            <div className="summary-log-chart"></div>
+            <div className="summary-log-chart">
+              <MonthlyDataChart expenses={filteredExpenses} currencySymbol={currencySymbol}/>
+            </div>
           }
           
           <div className="summary-log-button">
