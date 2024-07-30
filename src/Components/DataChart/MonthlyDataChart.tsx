@@ -12,7 +12,7 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
 
     return(
         <div className="monthly-data-chart">
-            {currencySymbol}
+            
         </div>
     );
 };
