@@ -3,14 +3,14 @@ import "./MonthlyDataChart.css";
 import { Expense } from "../Expenses/ExpenseInterface";
 import { Categories } from "../Expenses/Categories";
 import { ChartContainer } from '@mui/x-charts/ChartContainer';
-import { BarPlot, BarChart } from '@mui/x-charts/BarChart';
-import { PiePlot, PieChart } from "@mui/x-charts";
-import { ChartsYAxis, ChartsXAxis } from '@mui/x-charts'; 
+import { BarPlot, BarChart, PiePlot, PieChart, ChartsLegend, ChartsYAxis, ChartsXAxis } from "@mui/x-charts";
+import styled from "styled-components";
 
 interface monthylyDataChartProps {
     expenses: Expense[];    
     currencySymbol: string;
 };
+
 const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currencySymbol} ) => {
     
     // get each category value from the categories object
@@ -42,8 +42,6 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
     const chartData = Object.values(sumOfEachCategory);
     const categoryColorsArray = Categories.map(category => category.color);
     const categoryColors = Categories.map(category => Categories.find(c => c.value === category.label) ? category.color : '#000000');
-
-
     console.log(chartData, chartCategory, categoryColors);
 
     return(
@@ -63,8 +61,7 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
                             type:'ordinal',
                             values: chartCategory,
                             colors: categoryColors
-                        }
-                        
+                        }  
                     }
                 ]}
                 yAxis={[
@@ -72,18 +69,29 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
                         label: `Amount (${currencySymbol})`,
                     }
                 ]}
-
             />
-
+            
             <PieChart
-                width={600}
+                width={450}
                 height={300}
                 series={[
                     { 
                         data: chartDataSet, 
+                        innerRadius: 40,
+                        outerRadius: 80,
+                        highlightScope: { faded: 'global', highlighted: 'item' },
+                        faded: { innerRadius: 40, additionalRadius: -20, color: 'gray' },
                     }
                 ]}
+                slotProps={{
+                    legend: {
+                        direction: 'column',
+                        position: { vertical: 'top', horizontal: 'right' },
+                        padding: 20,
+                    },
+                  }}
             />
+
             {/*
             <ChartContainer
                 width={400}

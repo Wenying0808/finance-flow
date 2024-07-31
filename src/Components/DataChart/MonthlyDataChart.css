@@ -1,9 +1,13 @@
 .monthly-data-chart{
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 16px;
+    flex-direction: row;
+    gap: 16px;
+    padding: 20px;
     justify-items: center;
     align-items: center;
 
+    @media (max-width: 500px) {
+        gap: 0px;
+      }
 }
+

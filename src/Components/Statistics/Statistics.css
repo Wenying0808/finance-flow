@@ -132,6 +132,7 @@
     flex: 1 0 0;
     overflow-y: auto;
 }
+
 .summary-log-chart{
     position: absolute;
     top: 194px;
