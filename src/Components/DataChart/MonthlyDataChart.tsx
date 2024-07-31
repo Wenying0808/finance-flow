@@ -3,8 +3,8 @@ import "./MonthlyDataChart.css";
 import { Expense } from "../Expenses/ExpenseInterface";
 import { Categories } from "../Expenses/Categories";
 import { ChartContainer } from '@mui/x-charts/ChartContainer';
-import { BarPlot } from '@mui/x-charts/BarChart';
-import { PiePlot } from "@mui/x-charts";
+import { BarPlot, BarChart } from '@mui/x-charts/BarChart';
+import { PiePlot, PieChart } from "@mui/x-charts";
 import { ChartsYAxis, ChartsXAxis } from '@mui/x-charts'; 
 
 interface monthylyDataChartProps {
@@ -30,23 +30,61 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
             id: Number(`${index}`),
             value: amount,
             label: category,
-            /*color: categoryObj ? categoryObj.color : '#000000'*/
+            color: categoryObj ? categoryObj.color : '#000000'
         }
     });
-    
+
     /*console.log(chartDataSet);*/
     /*console.log(sumOfEachCategory);*/
     /*console.log(Object.entries(sumOfEachCategory));*/
 
     const chartCategory = Object.keys(sumOfEachCategory);
     const chartData = Object.values(sumOfEachCategory);
-    const categoryColor = Categories.map(category => category.color);
+    const categoryColorsArray = Categories.map(category => category.color);
+    const categoryColors = Categories.map(category => Categories.find(c => c.value === category.label) ? category.color : '#000000');
 
-    console.log(categoryColor);
-    console.log(chartData, chartCategory);
+
+    console.log(chartData, chartCategory, categoryColors);
 
     return(
         <div className="monthly-data-chart">
+            <BarChart
+                width={400}
+                height={300}
+                series={[
+                        {data: chartData},
+                ]}
+                xAxis={[
+                    { 
+                        data: chartCategory,
+                        scaleType: 'band',
+                        label: 'Categories',
+                        colorMap: {
+                            type:'ordinal',
+                            values: chartCategory,
+                            colors: categoryColors
+                        }
+                        
+                    }
+                ]}
+                yAxis={[
+                    { 
+                        label: `Amount (${currencySymbol})`,
+                    }
+                ]}
+
+            />
+
+            <PieChart
+                width={600}
+                height={300}
+                series={[
+                    { 
+                        data: chartDataSet, 
+                    }
+                ]}
+            />
+            {/*
             <ChartContainer
                 width={400}
                 height={300}
@@ -63,8 +101,15 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
                         scaleType: 'band' 
                     }
                 ]}
+
             >
-                <BarPlot />
+                <BarPlot 
+                    series={[
+                        {
+                            color: categoryColors
+                        }
+                    ]}
+                />
                 <ChartsXAxis />
                 <ChartsYAxis />
             </ChartContainer>
@@ -80,6 +125,7 @@ const MonthlyDataChart: React.FC<monthylyDataChartProps> = ( {expenses, currency
             >
                 <PiePlot />
             </ChartContainer> 
+            */} 
         </div>
     );
 };

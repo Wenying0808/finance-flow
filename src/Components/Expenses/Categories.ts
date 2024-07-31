@@ -1,10 +1,10 @@
 export const Categories = [
-    {value: "Education", label: "Education", color: "#A8D5E2"},
-    {value: "Entertainment", label: "Entertainment", color: "#F9D3B4"},
-    {value: "Food & Drinks", label:"Food & Drinks", color: "#F7E9A0" },
-    {value: "Health & Care", label:"Health & Care", color: "#B5D8B2" },
-    {value: "Holidays", label:"Holidays", color: "#E8C1C1" },
-    {value: "Home & Utilities", label:"Home & Utilities", color: "#D3C0E4"},
-    {value: "Shopping", label:"Shopping", color: "#F5C7E6" },
-    {value: "Transportation", label:"Transportation", color: "#D2E8D6" },
+    {value: "Education", label: "Education", color: "#78B4C8"},
+    {value: "Entertainment", label: "Entertainment", color: "#F5B68C"},
+    {value: "Food & Drinks", label:"Food & Drinks", color: "#E6D176" },
+    {value: "Health & Care", label:"Health & Care", color: "#8CBD8E" },
+    {value: "Holidays", label:"Holidays", color: "#D99A9A" },
+    {value: "Home & Utilities", label:"Home & Utilities", color: "#BFA3D3"},
+    {value: "Shopping", label:"Shopping", color: "#EBA6D2" },
+    {value: "Transportation", label:"Transportation", color: "#7A9B81" },
 ];
