@@ -2,9 +2,7 @@ import React from "react";
 import "./MonthlyDataChart.css";
 import { Expense } from "../Expenses/ExpenseInterface";
 import { Categories } from "../Expenses/Categories";
-import { ChartContainer } from '@mui/x-charts/ChartContainer';
-import { BarPlot, BarChart, PiePlot, PieChart, ChartsLegend, ChartsYAxis, ChartsXAxis } from "@mui/x-charts";
-import styled from "styled-components";
+import { BarChart, PieChart} from "@mui/x-charts";
 
 interface monthylyDataChartProps {
     expenses: Expense[];    

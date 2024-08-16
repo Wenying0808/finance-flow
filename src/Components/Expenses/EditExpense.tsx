@@ -7,7 +7,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import './EditExpense.css';
 import { Expense } from "./ExpenseInterface";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { toDateObject, toDateString } from "./DateHandling";
 import { useUserContext } from "../../Contexts/UserContextProvider";
 

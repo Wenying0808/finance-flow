@@ -1,18 +1,17 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 import React, {createContext, useState, useContext, ReactNode} from 'react';
 
-
 export const firebaseConfig = {
-    apiKey: "AIzaSyDWajFmlQ1rtmLEqrDxq5ytF6w2hktj_fc",
-    authDomain: "finance-flow-ebfc3.firebaseapp.com",
-    projectId: "finance-flow-ebfc3",
-    storageBucket: "finance-flow-ebfc3.appspot.com",
-    messagingSenderId: "532090806268",
-    appId: "1:532090806268:web:886f032786f846be11dc79",
-    measurementId: "G-9KNBRJQFLR"
-  };
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+};
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
@@ -23,8 +22,6 @@ const db = getFirestore(app);
 
 //Access Users collection
 const usersRef = collection(db, "Users");
-
-
 
 interface UserContextProps {
     children: ReactNode;

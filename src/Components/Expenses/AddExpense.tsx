@@ -13,7 +13,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 import { useUserContext } from "../../Contexts/UserContextProvider";
-import { collection, doc, setDoc } from "firebase/firestore";
 
 
 interface AddExpensePageProps {
