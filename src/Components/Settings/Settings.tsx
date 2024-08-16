@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Settings.css';
 import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button, Snackbar, Alert, IconButton } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
 import { useUserContext } from '../../Contexts/UserContextProvider';
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 
 const Settings: React.FC= () => {

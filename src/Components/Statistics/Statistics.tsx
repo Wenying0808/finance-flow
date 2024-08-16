@@ -18,7 +18,7 @@ import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
 import { FaBook } from "react-icons/fa6";
 import { IoGameController } from "react-icons/io5";
 import { BsSuitcaseFill } from "react-icons/bs";
-import { IconBase, IconType } from 'react-icons';
+import { IconType } from 'react-icons';
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import { collection, deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
