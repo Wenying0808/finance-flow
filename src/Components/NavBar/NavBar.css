@@ -11,8 +11,8 @@
     align-items: center;
     gap: 40px;
 
-
-    border-top: 1px solid var(--RoyalBlue, #4758DC);
+    border-top: 1px solid #a8a8a8;
+    background-color: black;
 }
 
 .navbar-tab{
@@ -21,7 +21,7 @@
     align-items: center;
     gap: 4px;
 
-    color: var(--Thundora, #404040);
+    color: #a8a8a8;
 
     cursor: pointer;
 }

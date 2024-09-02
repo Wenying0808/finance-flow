@@ -234,9 +234,34 @@ const Account: React.FC = () => {
     //sign-in form
     const signInForm = () : JSX.Element => (
         <div className="account-content">
-            <TextField required id="UserName" label="User Name" variant="outlined" value={userName} onChange={(e) => {setUserName(e.target.value)}}/>
-            <TextField required id="Email" label="Email" type="email" variant="outlined" value={email} onChange={(e) => {setEmail(e.target.value)}} onBlur={ () => validateEmail(email) } error={!isEmailValid} helperText={isEmailValid ? '' : `${emailInvalidMessage}`}/>
-            <TextField required id="Password" label="Password" type="password"variant="outlined" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+            <TextField 
+                required 
+                id="UserName" 
+                label="User Name" 
+                variant="outlined" 
+                value={userName} 
+                onChange={(e) => {setUserName(e.target.value)}}
+            />
+            <TextField 
+                required id="Email" 
+                label="Email" 
+                type="email" 
+                variant="outlined" 
+                value={email} 
+                onChange={(e) => {setEmail(e.target.value)}} 
+                onBlur={ () => validateEmail(email) } 
+                error={!isEmailValid} 
+                helperText={isEmailValid ? '' : `${emailInvalidMessage}`}
+            />
+            <TextField 
+                required 
+                id="Password" 
+                label="Password" 
+                type="password"
+                variant="outlined" 
+                value={password} 
+                onChange={(e) => {setPassword(e.target.value)}}
+            />
             {signInErrorMessage && (
                 <div className="error-message">
                     <IoAlertCircle style={{ width:'20px', height: '20px', color:'#E32327' }}/>
