@@ -198,6 +198,8 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
       ...prevState,
       month,
     }));
+    // close the month menu after selecting a month
+    setMonthMenuOpen(false);
   };
 
   const handleDeleteExpense = (expenseId: string) => {
