@@ -374,7 +374,11 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
           ?
             <div className="summary-log-list">
               {filteredExpenses.map((expense, index) => (
-                  <div className="log-card" key={index} >
+                  <div 
+                    className="log-card" 
+                    key={index} 
+                    style={{ borderBottom: isDarkMode ? `1px solid ${colors.Thundora}` : `1px solid ${colors.Gallery}`}}
+                  >
                     <div className="log-card-date">{toDateObject(expense.date).format('DD/MM')}</div>
                     <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
                     <div className="log-card-description" style={{ color: isDarkMode ? colors.Gallery : colors.Black }}>{expense.description}</div>
@@ -407,7 +411,11 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
           >
             <Button 
               variant="contained" 
-              sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+              sx={{ 
+                color: colors.White,
+                backgroundColor:"#4758DC",
+                '&:hover': { backgroundColor:"#4758DC" }
+              }} 
               onClick={handleOpenModal}
             >
               Add Expense

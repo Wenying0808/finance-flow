@@ -1,6 +1,7 @@
 const colors = {
     RoyalBlue: '#4758DC',
     Zumtho: '#E1EBFF',
+    PersianRed: '#d32f2f',
     Lavender: '#BB6BD9',
     Salem: '#058F23',
     Black: '#000000',

@@ -8,6 +8,7 @@ import { Currencies } from '../Expenses/Currencies';
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import { doc, setDoc } from "firebase/firestore";
 import { useTheme } from '../Theme/ThemeContext';
+import colors from '../../colors';
 
 
 const Settings: React.FC= () => {
@@ -104,7 +105,17 @@ const Settings: React.FC= () => {
         onChange={toggleTheme}
       />
       
-      <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>
+      <Button 
+        variant="contained" 
+        sx={{ 
+          color: colors.White,
+          backgroundColor:"#4758DC",
+          '&:hover': {backgroundColor:"#4758DC"}
+        }} 
+        onClick={handleSave}
+      >
+          Save
+      </Button>
       
       {/*<div>uid:{uid}</div>*/}
       <Snackbar

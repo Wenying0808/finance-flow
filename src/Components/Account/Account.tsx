@@ -278,7 +278,11 @@ const Account: React.FC = () => {
                     size="small"
                     onClick={handleSignUp} 
                     disabled={!isAccountFormValid}
-                    sx={{ color:"#4758DC", border:"1px solid #4758DC", '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}}}
+                    sx={{ 
+                        color:"#4758DC", 
+                        border: `1px solid ${colors.RoyalBlue}`, 
+                        '&:hover': {color: colors.RoyalBlue, border:`1px solid ${colors.RoyalBlue}`}
+                    }}
                 >
                     Sign up
                 </Button>
@@ -287,7 +291,11 @@ const Account: React.FC = () => {
                     size="small"
                     onClick={handleSignIn} 
                     disabled={!isAccountFormValid}
-                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}}
+                    sx={{ 
+                        color: colors.White,
+                        backgroundColor: colors.RoyalBlue,
+                        '&:hover': { backgroundColor: colors.RoyalBlue }
+                    }}
                 >
                     Log in
                 </Button>
@@ -295,8 +303,12 @@ const Account: React.FC = () => {
                     variant="contained"
                     size="small"
                     onClick={handleGmailSignIn} 
-                    startIcon={<GoogleIcon/>}
-                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}}
+                    startIcon={<GoogleIcon />}
+                    sx={{ 
+                        color: colors.White,
+                        backgroundColor: colors.RoyalBlue, 
+                        '&:hover': {backgroundColor: colors.RoyalBlue}
+                    }}
                 >
                     Log in
                 </Button>
@@ -323,7 +335,11 @@ const Account: React.FC = () => {
                 variant="outlined" 
                 size="small"
                 onClick={handleSignOut}
-                sx={{ color:"#4758DC", border:"1px solid #4758DC", '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}}}
+                sx={{ 
+                    color:"#4758DC", 
+                    border:"1px solid #4758DC", 
+                    '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}
+                }}
             >
                 Log out
             </Button>

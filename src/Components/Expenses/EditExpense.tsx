@@ -137,7 +137,14 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
             <div className="edit-expense-buttons">
                 <Button 
                     variant="contained" 
-                    color="error" 
+                    sx={{
+                        color: colors.White,
+                        backgroundColor: colors.PersianRed,
+                        '&:hover': { 
+                            color: colors.White, 
+                            backgroundColor: colors.PersianRed
+                        }
+                    }}
                     startIcon={<RiDeleteBinLine />} 
                     onClick={() => onDeleteExpense(formData.id)}
                 >
@@ -145,7 +152,14 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                 </Button>
                 <Button 
                     variant="outlined" 
-                    sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} 
+                    sx={{ 
+                        color: colors.RoyalBlue, 
+                        borderColor: colors.RoyalBlue, 
+                        '&:hover': { 
+                            color: colors.RoyalBlue, 
+                            borderColor: colors.RoyalBlue
+                        }
+                    }} 
                     onClick={onCancel}
                 >
                     Cancel
@@ -153,7 +167,11 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                 <Button 
                     variant="contained" 
                     type='submit' 
-                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+                    sx={{ 
+                        color: colors.White,
+                        backgroundColor: colors.RoyalBlue,
+                        '&:hover': {backgroundColor:colors.RoyalBlue}
+                    }} 
                     disabled ={!expense} 
                     onClick={handleSubmitForm}
                 >
