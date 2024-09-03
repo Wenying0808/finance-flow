@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { toDateObject, toDateString } from "./DateHandling";
 import { useUserContext } from "../../Contexts/UserContextProvider";
 import { useTheme } from "../Theme/ThemeContext";
+import colors from "../../colors";
 
 
 interface EditExpensePageProps {
@@ -23,6 +24,7 @@ interface EditExpensePageProps {
 const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCancel, onDeleteExpense }) => {
 
     const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
+    const {isDarkMode} = useTheme();
     const [formData, setFormData] = useState<Expense>({
         id: expense ? expense.id : '',
         date: expense ? expense.date : toDateString(dayjs()),
@@ -61,9 +63,15 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
 
 
     return (
-        <div className="edit-expense-container">
+        <div className="edit-expense-container"
+            style={{ backgroundColor: isDarkMode ? colors.MineShaft : colors.White }}
+        >
             <div className="page-header">
-                <div className="page-header-title">Edit Expense</div>
+                <div className="page-header-title"
+                    style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+                >
+                    Edit Expense
+                </div>
                 <IconButton  sx={{ color:"#4758DC" ,'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)" }}} onClick={onCancel}>
                     <IoIosCloseCircleOutline />
                 </IconButton>

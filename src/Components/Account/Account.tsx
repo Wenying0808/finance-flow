@@ -8,10 +8,13 @@ import { doc, collection, addDoc, setDoc, getDoc, where, query, getDocs } from "
 import validator from 'validator';
 import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
+import { useTheme } from '../Theme/ThemeContext';
+import colors from '../../colors';
 import GoogleIcon from '@mui/icons-material/Google';
-const Account: React.FC = () => {
-    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, theme, setTheme, auth, db, usersRef } = useUserContext();
 
+const Account: React.FC = () => {
+    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
+    const { isDarkMode } = useTheme();
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
     const [emailInvalidMessage, setEmailInvalidMessage] =useState<string>('');
@@ -307,7 +310,11 @@ const Account: React.FC = () => {
     const userDetails = () : JSX.Element => (
         <div className="account-content">
             <div className="account-login-info">
-                <div className="account-login-info-name">{userName}</div>
+                <div className="account-login-info-name"
+                    style={{ color: isDarkMode ? colors.Gallery : colors.Black}}
+                >
+                    {userName}
+                </div>
                 <div className="account-login-info-email">{email}</div>
                 {/*<div>uid:{uid}</div>*/}
             </div>

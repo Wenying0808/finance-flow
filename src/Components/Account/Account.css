@@ -39,14 +39,13 @@
 .account-login-info-name{
     width: 100%;
     overflow: hidden;
-    color: var(--Black, #000);
     text-align: center;
     text-overflow: ellipsis;
     font-family: "Open Sans";
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    line-height: 120%; /* 16.8px */
+    line-height: 120%;
 }
 
 .account-login-info-email{
@@ -59,7 +58,7 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
-    line-height: 120%; /* 14.4px */
+    line-height: 120%; 
 }
 
 .error-message{

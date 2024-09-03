@@ -24,12 +24,12 @@ import { useUserContext } from '../../Contexts/UserContextProvider';
 import { collection, deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { RiDeleteBinLine, RiEdit2Line  } from "react-icons/ri";
 import colors from '../../colors';
+import { useTheme } from '../Theme/ThemeContext';
 
 
 interface StatisticsProps {
   onDeleteExpense: (expenseId: string) => void;
 }
-
 
 interface CategoryIconMap {
   [key: string]: IconType; // Map category strings to corresponding icon components
@@ -50,7 +50,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   //access uid from context
   const {currencySymbol, budget, uid, userDocId, db, usersRef} = useUserContext();
-
+  const { isDarkMode } = useTheme();
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [isMonthMenuOpen, setMonthMenuOpen] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'table' | 'chart'>('table');
@@ -168,7 +168,8 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   const getCategoryIcon = (category: string): ReactNode => {
     const Icon = categoryIconMap[category];
-    return Icon ? <Icon /> : '';
+    const IconColor = isDarkMode ? colors.White : colors.Thundora;
+    return Icon ? <Icon color={IconColor}/> : '';
   };
 
   // Filter expenses based on selected month & year
@@ -266,11 +267,21 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
   
   return (
     <>
-      <div className="month-year-control">
-        <span className="month-year-control-header">
+      <div className="month-year-control"
+        style={{ 
+          backgroundColor: isDarkMode ? colors.MineShaft : colors.White,
+          borderBottom: isDarkMode ? `2px solid ${colors.Gallery}` : `2px solid ${colors.RoyalBlue}`
+        }}
+      >
+        <span 
+          className="month-year-control-header" 
+          style={{ 
+            color: isDarkMode ? colors.Gallery : colors.MineShaft,
+          }}
+        >
           {dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}
         </span>
-        <IconButton onClick={handleMonthMenu} sx={{ color: colors.Gallery }}>
+        <IconButton onClick={handleMonthMenu} sx={{ color: isDarkMode ? colors.Gallery : colors.MineShaft }}>
           {isMonthMenuOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
         </IconButton>
       </div>
@@ -324,17 +335,34 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
           </div>
         )}
       <div className="statsitcs-content">
-        <div className="summary">
+        <div className="summary"
+          style={{ 
+            backgroundColor: isDarkMode ? colors.MineShaft : colors.White,
+            borderBottom: isDarkMode ? `1px solid ${colors.Gallery}` : `1px solid ${colors.Gallery}`
+          }}
+        >
           <div className="summary-info">
-            <div className="summary-info-header">Budget: </div>
+            <div className="summary-info-header"
+              style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+            >
+              Budget: 
+            </div>
             <div className="summary-info-value budget">{currencySymbol}{budget}</div>
           </div>
           <div className="summary-info">
-            <div className="summary-info-header">Monthly Expense: </div>
+            <div className="summary-info-header"
+              style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+            >
+              Monthly Expense: 
+            </div>
             <div className="summary-info-value expense">{currencySymbol}{monthlyTotalExpense}</div>
           </div>
           <div className="summary-info">
-            <div className="summary-info-header">Monthly Balance: </div>
+            <div className="summary-info-header"
+              style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+            >
+              Monthly Balance: 
+            </div>
             <div className="summary-info-value balance">{currencySymbol}{monthlyBalance}</div>
           </div>
           <div className="data-view-control">
@@ -349,7 +377,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
                   <div className="log-card" key={index} >
                     <div className="log-card-date">{toDateObject(expense.date).format('DD/MM')}</div>
                     <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
-                    <div className="log-card-description">{expense.description}</div>
+                    <div className="log-card-description" style={{ color: isDarkMode ? colors.Gallery : colors.Black }}>{expense.description}</div>
                     <div className="log-card-amount">{currencySymbol}{expense.amount}</div>
                     <IconButton 
                       size="small" 
@@ -372,7 +400,11 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             </div>
           }
           
-          <div className="summary-log-button">
+          <div className="summary-log-button"
+            style={{ 
+              backgroundColor: isDarkMode ? colors.MineShaft : colors.White,
+            }}
+          >
             <Button 
               variant="contained" 
               sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
