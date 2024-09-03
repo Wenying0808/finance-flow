@@ -7,12 +7,14 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import { doc, setDoc } from "firebase/firestore";
+import { useTheme } from '../Theme/ThemeContext';
 
 
 const Settings: React.FC= () => {
   
   //access uid from context
-  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, theme, setTheme, db, usersRef} = useUserContext();
+  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db, usersRef} = useUserContext();
+  const {isDarkMode, toggleTheme} = useTheme();
 
   const [newCurrency, setNewCurrency] = useState<string>(currency);
   const [newCurrencySymbol, setNewCurrencySymbol] = useState<string>(currencySymbol);
@@ -31,10 +33,6 @@ const Settings: React.FC= () => {
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewBudget(Number(e.target.value));
-  }
-
-  const handleThemeChange = () => {
-    setTheme((prev: string) => (prev === 'light' ? 'dark' : 'light'));
   }
 
   const handleSave = async() => {
@@ -101,9 +99,9 @@ const Settings: React.FC= () => {
 
       <FormControlLabel
         control={<CustomSwitch sx={{ m: 1 }} />}
-        label={theme === 'light' ? "Light Mode" : "Dark Mode"}
-        checked={theme === 'dark'}
-        onChange={handleThemeChange}
+        label={isDarkMode ? "Dark Mode" : "Light Mode"}
+        checked={isDarkMode}
+        onChange={toggleTheme}
       />
       
       <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>

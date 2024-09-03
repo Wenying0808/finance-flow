@@ -8,7 +8,7 @@ const colors = {
     Thundora: '#404040',
     Manatee: '#97999C',
     Gallery: '#EFEFEF',
-    White: '#FFFFF',
+    White: '#FFFFFF',
 };
   
 export default colors;

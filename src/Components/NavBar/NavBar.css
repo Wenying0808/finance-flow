@@ -10,8 +10,6 @@
     justify-content: center;
     align-items: center;
     gap: 40px;
-
-    border-top: 1px solid #EFEFEF;
 }
 
 .navbar-tab{
@@ -20,7 +18,14 @@
     align-items: center;
     gap: 4px;
     cursor: pointer;
-    color: var(--RoyalBlue, #EFEFEF);
+}
+
+.navbar-tab.lightmode {
+    color: var(--Black, #000000);
+}
+
+.navbar-tab.darkmode {
+    color: var(--Gallery, #EFEFEF);
 }
 
 span{

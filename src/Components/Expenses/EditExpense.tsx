@@ -10,6 +10,7 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import dayjs from "dayjs";
 import { toDateObject, toDateString } from "./DateHandling";
 import { useUserContext } from "../../Contexts/UserContextProvider";
+import { useTheme } from "../Theme/ThemeContext";
 
 
 interface EditExpensePageProps {
@@ -21,8 +22,7 @@ interface EditExpensePageProps {
 
 const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCancel, onDeleteExpense }) => {
 
-    const {currencySymbol, budget, theme, setTheme, uid,  userDocId, db, usersRef} = useUserContext();
-
+    const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
     const [formData, setFormData] = useState<Expense>({
         id: expense ? expense.id : '',
         date: expense ? expense.date : toDateString(dayjs()),

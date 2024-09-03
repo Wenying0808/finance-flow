@@ -3,6 +3,7 @@ import { LuSettings2 } from "react-icons/lu";
 import { LuBarChartBig } from "react-icons/lu";
 import { LuUserCircle2 } from "react-icons/lu";
 import { Tab } from './Tab';
+import { useTheme } from '../Theme/ThemeContext';
 import './NavBar.css';
 import colors from '../../colors';
 
@@ -12,6 +13,7 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({currentTab, setCurrentTab}) => {
+    const {isDarkMode} = useTheme();
 
     const handleChangeTab = (tab: Tab) => {
         setCurrentTab (tab);
@@ -19,11 +21,14 @@ const NavBar: React.FC<NavBarProps> = ({currentTab, setCurrentTab}) => {
 
     return(
         <ul 
-            className='navbar' 
-            style={{ backgroundColor: colors.MineShaft }}
+            className="navbar"
+            style={{ 
+                backgroundColor: isDarkMode ? colors.MineShaft : colors.White,
+                borderTop: isDarkMode ? `1px solid ${colors.Gallery}` : `1px solid ${colors.RoyalBlue}`
+            }}
         >
             <li 
-                className= {`navbar-tab ${currentTab === Tab.ACCOUNT ? 'selected' : ''}`} 
+                className= {`navbar-tab ${currentTab === Tab.ACCOUNT ? 'selected' : ''} ${isDarkMode ? 'darkmode' : 'lightmode'}`} 
                 onClick={() => handleChangeTab(Tab.ACCOUNT)}
             >
                 <LuUserCircle2 />
@@ -31,7 +36,7 @@ const NavBar: React.FC<NavBarProps> = ({currentTab, setCurrentTab}) => {
             </li>
             
             <li 
-                className= {`navbar-tab ${currentTab === Tab.STATISTICS ? 'selected' : ''}`} 
+                className= {`navbar-tab ${currentTab === Tab.STATISTICS ? 'selected' : ''} ${isDarkMode ? 'darkmode' : 'lightmode'}`} 
                 onClick={() => handleChangeTab(Tab.STATISTICS)}
             >
                 <LuBarChartBig />
@@ -39,7 +44,7 @@ const NavBar: React.FC<NavBarProps> = ({currentTab, setCurrentTab}) => {
             </li>
 
             <li 
-                className={`navbar-tab ${currentTab === Tab.SETTINGS ? 'selected' : ''}`} 
+                className={`navbar-tab ${currentTab === Tab.SETTINGS ? 'selected' : ''} ${isDarkMode ? 'darkmode' : 'lightmode'}`} 
                 onClick={() => handleChangeTab(Tab.SETTINGS)}
             >
                 <LuSettings2 /> 

@@ -22,7 +22,7 @@ interface AddExpensePageProps {
 
 const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
 
-    const {currencySymbol, budget,theme, setTheme, uid,  userDocId, db, usersRef} = useUserContext();
+    const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
 
     const [description, setDescription] = useState<string>('');
     const [category, setCategory]= useState<string>('');

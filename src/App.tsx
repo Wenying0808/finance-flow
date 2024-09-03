@@ -6,7 +6,8 @@ import Statistics from './Components/Statistics/Statistics';
 import './App.css';
 import { Tab } from './Components/NavBar/Tab';
 import { Currencies } from './Components/Expenses/Currencies';
-import {useUserContext } from './Contexts/UserContextProvider';
+import { useUserContext } from './Contexts/UserContextProvider';
+import { ThemeProvider} from './Components/Theme/ThemeContext';
 
 const App: React.FC = () => {
   const { uid,  userDocId, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, db } = useUserContext();
@@ -35,14 +36,14 @@ const App: React.FC = () => {
   }, [currency, setCurrencySymbol])
 
   return (
-      
+      <ThemeProvider>
         <div className="App">
           <div className="app-content">
           {renderTabContent()}
           </div> 
           <NavBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
         </div>
-      
+      </ThemeProvider>
   );
 }
 
