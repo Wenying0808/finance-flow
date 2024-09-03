@@ -10,7 +10,7 @@ import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import GoogleIcon from '@mui/icons-material/Google';
 const Account: React.FC = () => {
-    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
+    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, theme, setTheme, auth, db, usersRef } = useUserContext();
 
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);

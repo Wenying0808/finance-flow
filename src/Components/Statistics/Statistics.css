@@ -23,12 +23,12 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-
+    background-color: var(--MineShaft, #232323);
     border-bottom: 1px solid var(--RoyalBlue, #4758DC);
 }
 
 .month-year-control-header{
-    color: var(--Black, #000);
+    color: var(--Gallery, #EFEFEF);
     font-family: "Open Sans";
     font-size: 18px;
     font-style: normal;

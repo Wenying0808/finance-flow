@@ -21,7 +21,7 @@ interface EditExpensePageProps {
 
 const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCancel, onDeleteExpense }) => {
 
-    const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
+    const {currencySymbol, budget, theme, setTheme, uid,  userDocId, db, usersRef} = useUserContext();
 
     const [formData, setFormData] = useState<Expense>({
         id: expense ? expense.id : '',

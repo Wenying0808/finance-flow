@@ -27,6 +27,9 @@ interface UserContextProps {
     children: ReactNode;
 };
 
+// Define theme type and toggle function
+type Theme = 'light' | 'dark';
+
 interface UserContextType {
     uid: string | null;
     setUid: React.Dispatch<React.SetStateAction<string | null>>;
@@ -38,6 +41,8 @@ interface UserContextType {
     setBudget: React.Dispatch<React.SetStateAction<number>>;
     currencySymbol: string;
     setCurrencySymbol: React.Dispatch<React.SetStateAction<string>>;
+    theme: Theme;
+    setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 }
 
 const UserContext = createContext<any>(null);
@@ -49,10 +54,10 @@ const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {
     const [currency, setCurrency] = useState<string>('EUR');
     const [budget, setBudget] = useState<number>(1000);
     const [currencySymbol, setCurrencySymbol] = useState<string>('€');
-
+    const [theme, setTheme] = useState<Theme>('light');
 
     return(
-        <UserContext.Provider value={{ uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, auth, db, usersRef}}>
+        <UserContext.Provider value={{ uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, theme, setTheme, auth, db, usersRef}}>
             {children}
         </UserContext.Provider>
     );

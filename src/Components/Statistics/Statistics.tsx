@@ -23,6 +23,7 @@ import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import { collection, deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { RiDeleteBinLine, RiEdit2Line  } from "react-icons/ri";
+import colors from '../../colors';
 
 
 interface StatisticsProps {
@@ -48,7 +49,7 @@ const categoryIconMap: CategoryIconMap = {
 const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   //access uid from context
-  const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
+  const {currencySymbol, budget, uid, theme, setTheme, userDocId, db, usersRef} = useUserContext();
 
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [isMonthMenuOpen, setMonthMenuOpen] = useState<boolean>(false);
@@ -269,8 +270,8 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
         <span className="month-year-control-header">
           {dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}
         </span>
-        <IconButton onClick={handleMonthMenu}>
-        {isMonthMenuOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+        <IconButton onClick={handleMonthMenu} sx={{ color: colors.Gallery }}>
+          {isMonthMenuOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
         </IconButton>
       </div>
       {isMonthMenuOpen && (
