@@ -82,12 +82,11 @@
 }
 
 .summary-info-header{
-    color: #000;
     font-family: "Open Sans";
     font-size: 12px;
     font-style: normal;
     font-weight: 700;
-    line-height: 120%; /* 14.4px */
+    line-height: 120%;
 }
 
 .summary-info-value{
@@ -95,7 +94,7 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 700;
-    line-height: 120%; /* 14.4px */
+    line-height: 120%; 
 }
 
 .summary-info-value.budget{
@@ -145,8 +144,6 @@
     align-items: flex-start;
     gap: 8px;
     align-self: stretch;
-
-    border-bottom: 1px solid var(--Gallery, #EFEFEF);
 }
 .log-card:hover{
     background: rgba(71, 88, 220, 0.1);

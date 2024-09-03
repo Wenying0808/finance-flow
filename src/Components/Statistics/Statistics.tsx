@@ -286,13 +286,32 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
         </IconButton>
       </div>
       {isMonthMenuOpen && (
-          <div className="month-menu">
+          <div className="month-menu" style={{ backgroundColor: isDarkMode ? colors.Thundora : colors.White}}>
             <div className='year-control'>
-              <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="previous month" onClick={handlePreviousYear}>
+              <IconButton 
+                sx={{
+                  color: colors.RoyalBlue,
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? colors.Zumtho : "rgba(71, 88, 220, 0.1)"
+                  }
+                }} 
+                aria-label="previous month" onClick={handlePreviousYear}>
               <GrFormPreviousLink />
               </IconButton>
-              <span className="year-control-header">{dayjs().year(selectedMonthAndYear.year).format('YYYY')}</span>
-              <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="next month" onClick={handleNextYear}>
+              <span 
+                className="year-control-header"
+                style={{ color: isDarkMode ? colors.White : colors.Black }}
+              >
+                {dayjs().year(selectedMonthAndYear.year).format('YYYY')}
+              </span>
+              <IconButton 
+                sx={{
+                  color: colors.RoyalBlue,
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? colors.Zumtho : "rgba(71, 88, 220, 0.1)"
+                  }
+                }} 
+                aria-label="next month" onClick={handleNextYear}>
                 <GrFormNextLink />
               </IconButton>
             </div>
@@ -315,18 +334,21 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
                       height: '32px', 
                     },
                     '& .MuiPickersMonth-root': {
-                      color: '#000', // Month text color
+                      color: isDarkMode ? colors.White : colors.Black, // Month text color
+                      '&:hover': {
+                          color: isDarkMode ? colors.RoyalBlue : colors.Black, 
+                        },
                     },
                     '& .MuiPickersMonth-monthButton': {
                         '&.Mui-selected': {
-                          backgroundColor: '#4758DC', // Selected month background color
-                          color: '#fff', // Selected month text color
+                          backgroundColor: colors.RoyalBlue, // Selected month background color
+                          color: colors.White, // Selected month text color
                         },
                         '&.Mui-selected:hover': {
                           backgroundColor: '#3747AC', // Hover background color for selected month
                         },
                         '&:hover': {
-                          backgroundColor: 'rgba(71, 88, 220, 0.1)', // Hover background color
+                          backgroundColor: isDarkMode ? colors.Zumtho : 'rgba(71, 88, 220, 0.1)', // Hover background color
                         },
                     }
                   }}
