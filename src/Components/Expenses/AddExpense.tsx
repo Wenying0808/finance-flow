@@ -13,7 +13,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 import { useUserContext } from "../../Contexts/UserContextProvider";
-
+import { useTheme } from "../Theme/ThemeContext";
+import colors from "../../colors";
 
 interface AddExpensePageProps {
     onSave: (expense: Expense) => void;
@@ -23,7 +24,7 @@ interface AddExpensePageProps {
 const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
 
     const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
-
+    const {isDarkMode} = useTheme();
     const [description, setDescription] = useState<string>('');
     const [category, setCategory]= useState<string>('');
     const [amount, setAmount] = useState<number>(0);
@@ -80,9 +81,15 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
     };
 
     return (
-        <div className="add-expense-container">
+        <div className="add-expense-container"
+            style={{ backgroundColor: isDarkMode ? colors.MineShaft : colors.White }}
+        >
             <div className="page-header">
-                <div className="page-header-title">Add Expense</div>
+                <div className="page-header-title"
+                    style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+                >
+                    Add Expense
+                </div>
                 <IconButton  sx={{ color:"#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"} }} onClick={onCancel}>
                     <IoIosCloseCircleOutline />
                 </IconButton>
@@ -143,22 +150,30 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
             <div className="add-expense-buttons">
                 <Button 
                     variant="outlined" 
-                    sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} 
+                    sx={{ 
+                        color:colors.RoyalBlue, 
+                        borderColor:colors.RoyalBlue, 
+                        '&:hover': { 
+                            color:colors.RoyalBlue, 
+                            borderColor:colors.RoyalBlue}
+                        }} 
                     onClick={onCancel}
                 >
                     Cancel
                 </Button>
                 <Button 
                     variant="contained" 
-                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+                    sx={{ 
+                        backgroundColor:colors.RoyalBlue,
+                        '&:hover': {
+                            backgroundColor:colors.RoyalBlue}
+                        }} 
                     onClick={handleSave} 
                     disabled={!isSaveEnabled}
                 >
                     Save
                 </Button>
             </div>
-            
-
         </div>
     );
 

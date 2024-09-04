@@ -41,6 +41,7 @@ interface UserContextType {
 }
 
 const UserContext = createContext<any>(null);
+
 export const useUserContext = () => useContext(UserContext);
 
 const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {
@@ -49,8 +50,7 @@ const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {
     const [currency, setCurrency] = useState<string>('EUR');
     const [budget, setBudget] = useState<number>(1000);
     const [currencySymbol, setCurrencySymbol] = useState<string>('€');
-
-
+    
     return(
         <UserContext.Provider value={{ uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, currencySymbol, setCurrencySymbol, auth, db, usersRef}}>
             {children}

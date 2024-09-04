@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import './Settings.css';
-import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button, Snackbar, Alert, IconButton } from '@mui/material';
+import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button, Snackbar, Alert} from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { CustomSwitch } from '../Switch/customSwitch';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import { doc, setDoc } from "firebase/firestore";
+import { useTheme } from '../Theme/ThemeContext';
+import colors from '../../colors';
 
 
 const Settings: React.FC= () => {
   
   //access uid from context
-  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db, usersRef} = useUserContext();
+  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db} = useUserContext();
+  const {isDarkMode, toggleTheme} = useTheme();
 
   const [newCurrency, setNewCurrency] = useState<string>(currency);
   const [newCurrencySymbol, setNewCurrencySymbol] = useState<string>(currencySymbol);
@@ -36,7 +41,12 @@ const Settings: React.FC= () => {
     //store to firestore
     try {
       const userDocRef = doc(db, "Users", userDocId);
-      await setDoc(userDocRef, {currency: newCurrency, budget: newBudget, uid: uid});
+      await setDoc(userDocRef, {
+        currency: newCurrency, 
+        budget: newBudget, 
+        uid: uid,
+        isDarkMode: isDarkMode,
+      });
 
       setCurrency(newCurrency);
       setBudget(newBudget);
@@ -51,7 +61,6 @@ const Settings: React.FC= () => {
       setOpenAlert(true);
       setAlertSeverity('error'); 
     }
-
   };
 
   const handleAlertClose = () => {
@@ -91,9 +100,26 @@ const Settings: React.FC= () => {
         value={newBudget} 
         onChange={handleBudgetChange}
 
-        required/>
+        required
+      />
+
+      <FormControlLabel
+        control={<CustomSwitch sx={{ m: 1 }} />}
+        label={isDarkMode ? "Dark Mode" : "Light Mode"}
+        checked={isDarkMode}
+        onChange={toggleTheme}
+      />
       
-      <Button variant="contained" sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} onClick={handleSave}>Save</Button>
+      <Button 
+        variant="contained" 
+        sx={{ 
+          backgroundColor:colors.RoyalBlue,
+          '&:hover': {backgroundColor:colors.RoyalBlue}
+        }} 
+        onClick={handleSave}
+      >
+          Save
+      </Button>
       
       {/*<div>uid:{uid}</div>*/}
       <Snackbar

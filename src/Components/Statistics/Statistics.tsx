@@ -12,7 +12,7 @@ import AddExpensePage from '../Expenses/AddExpense';
 import EditExpensePage from '../Expenses/EditExpense';
 import MonthlyDataChart from '../DataChart/MonthlyDataChart';
 import dayjs, { Dayjs } from 'dayjs';
-import { toDateObject, toDateString, sortExpensesByDate } from "../Expenses/DateHandling";
+import { toDateObject, sortExpensesByDate } from "../Expenses/DateHandling";
 import { MdFastfood  } from "react-icons/md";
 import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
 import { FaBook } from "react-icons/fa6";
@@ -23,12 +23,13 @@ import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import { useUserContext } from '../../Contexts/UserContextProvider';
 import { collection, deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { RiDeleteBinLine, RiEdit2Line  } from "react-icons/ri";
+import colors from '../../colors';
+import { useTheme } from '../Theme/ThemeContext';
 
 
 interface StatisticsProps {
   onDeleteExpense: (expenseId: string) => void;
 }
-
 
 interface CategoryIconMap {
   [key: string]: IconType; // Map category strings to corresponding icon components
@@ -48,8 +49,8 @@ const categoryIconMap: CategoryIconMap = {
 const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   //access uid from context
-  const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
-
+  const { currencySymbol, budget, uid, db } = useUserContext();
+  const { isDarkMode } = useTheme();
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [isMonthMenuOpen, setMonthMenuOpen] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'table' | 'chart'>('table');
@@ -167,7 +168,8 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   const getCategoryIcon = (category: string): ReactNode => {
     const Icon = categoryIconMap[category];
-    return Icon ? <Icon /> : '';
+    const IconColor = isDarkMode ? colors.White : colors.Thundora;
+    return Icon ? <Icon color={IconColor}/> : '';
   };
 
   // Filter expenses based on selected month & year
@@ -262,25 +264,53 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   }, [expenses, budget, formattedSelectedMonthAndYear]);
 
-  
   return (
     <>
-      <div className="month-year-control">
-        <span className="month-year-control-header">
+      <div className="month-year-control"
+        style={{ 
+          backgroundColor: isDarkMode ? colors.MineShaft : colors.White,
+          borderBottom: isDarkMode ? `2px solid ${colors.Gallery}` : `2px solid ${colors.RoyalBlue}`
+        }}
+      >
+        <span 
+          className="month-year-control-header" 
+          style={{ 
+            color: isDarkMode ? colors.Gallery : colors.MineShaft,
+          }}
+        >
           {dayjs().month(selectedMonthAndYear.month).year(selectedMonthAndYear.year).format('MM YYYY')}
         </span>
-        <IconButton onClick={handleMonthMenu}>
-        {isMonthMenuOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+        <IconButton onClick={handleMonthMenu} sx={{ color: isDarkMode ? colors.Gallery : colors.MineShaft }}>
+          {isMonthMenuOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
         </IconButton>
       </div>
       {isMonthMenuOpen && (
-          <div className="month-menu">
+          <div className="month-menu" style={{ backgroundColor: isDarkMode ? colors.Thundora : colors.White}}>
             <div className='year-control'>
-              <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="previous month" onClick={handlePreviousYear}>
+              <IconButton 
+                sx={{
+                  color: colors.RoyalBlue,
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? colors.Zumtho : "rgba(71, 88, 220, 0.1)"
+                  }
+                }} 
+                aria-label="previous month" onClick={handlePreviousYear}>
               <GrFormPreviousLink />
               </IconButton>
-              <span className="year-control-header">{dayjs().year(selectedMonthAndYear.year).format('YYYY')}</span>
-              <IconButton sx={{color: "#4758DC",'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)"}}} aria-label="next month" onClick={handleNextYear}>
+              <span 
+                className="year-control-header"
+                style={{ color: isDarkMode ? colors.White : colors.Black }}
+              >
+                {dayjs().year(selectedMonthAndYear.year).format('YYYY')}
+              </span>
+              <IconButton 
+                sx={{
+                  color: colors.RoyalBlue,
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? colors.Zumtho : "rgba(71, 88, 220, 0.1)"
+                  }
+                }} 
+                aria-label="next month" onClick={handleNextYear}>
                 <GrFormNextLink />
               </IconButton>
             </div>
@@ -303,18 +333,21 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
                       height: '32px', 
                     },
                     '& .MuiPickersMonth-root': {
-                      color: '#000', // Month text color
+                      color: isDarkMode ? colors.White : colors.Black, // Month text color
+                      '&:hover': {
+                          color: isDarkMode ? colors.RoyalBlue : colors.Black, 
+                        },
                     },
                     '& .MuiPickersMonth-monthButton': {
                         '&.Mui-selected': {
-                          backgroundColor: '#4758DC', // Selected month background color
-                          color: '#fff', // Selected month text color
+                          backgroundColor: colors.RoyalBlue, // Selected month background color
+                          color: colors.White, // Selected month text color
                         },
                         '&.Mui-selected:hover': {
                           backgroundColor: '#3747AC', // Hover background color for selected month
                         },
                         '&:hover': {
-                          backgroundColor: 'rgba(71, 88, 220, 0.1)', // Hover background color
+                          backgroundColor: isDarkMode ? colors.Zumtho : 'rgba(71, 88, 220, 0.1)', // Hover background color
                         },
                     }
                   }}
@@ -323,18 +356,35 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
           </div>
         )}
       <div className="statsitcs-content">
-        <div className="summary">
+        <div className="summary"
+          style={{ 
+            backgroundColor: isDarkMode ? colors.MineShaft : colors.White,
+            borderBottom: isDarkMode ? `1px solid ${colors.Gallery}` : `1px solid ${colors.Gallery}`
+          }}
+        >
           <div className="summary-info">
-            <div className="summary-info-header">Budget: </div>
-            <div className="summary-info-value budget">{currencySymbol}{budget}</div>
+            <div className="summary-info-header"
+              style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+            >
+              Budget: 
+            </div>
+            <div className="summary-info-value budget" style={{ color: colors.RoyalBlue }}>{currencySymbol}{budget}</div>
           </div>
           <div className="summary-info">
-            <div className="summary-info-header">Monthly Expense: </div>
-            <div className="summary-info-value expense">{currencySymbol}{monthlyTotalExpense}</div>
+            <div className="summary-info-header"
+              style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+            >
+              Monthly Expense: 
+            </div>
+            <div className="summary-info-value expense" style={{ color: colors.Lavender }}>{currencySymbol}{monthlyTotalExpense}</div>
           </div>
           <div className="summary-info">
-            <div className="summary-info-header">Monthly Balance: </div>
-            <div className="summary-info-value balance">{currencySymbol}{monthlyBalance}</div>
+            <div className="summary-info-header"
+              style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+            >
+              Monthly Balance: 
+            </div>
+            <div className="summary-info-value balance" style={{ color: colors.Salem }}>{currencySymbol}{monthlyBalance}</div>
           </div>
           <div className="data-view-control">
             <CustomToggleButton view={viewMode} onViewChange={handleViewModeChange}/>
@@ -345,10 +395,14 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
           ?
             <div className="summary-log-list">
               {filteredExpenses.map((expense, index) => (
-                  <div className="log-card" key={index} >
+                  <div 
+                    className="log-card" 
+                    key={index} 
+                    style={{ borderBottom: isDarkMode ? `1px solid ${colors.Thundora}` : `1px solid ${colors.Gallery}`}}
+                  >
                     <div className="log-card-date">{toDateObject(expense.date).format('DD/MM')}</div>
                     <div className="log-card-category">{getCategoryIcon(expense.category)}</div>
-                    <div className="log-card-description">{expense.description}</div>
+                    <div className="log-card-description" style={{ color: isDarkMode ? colors.Gallery : colors.Black }}>{expense.description}</div>
                     <div className="log-card-amount">{currencySymbol}{expense.amount}</div>
                     <IconButton 
                       size="small" 
@@ -371,10 +425,18 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             </div>
           }
           
-          <div className="summary-log-button">
+          <div className="summary-log-button"
+            style={{ 
+              backgroundColor: isDarkMode ? colors.MineShaft : colors.White,
+            }}
+          >
             <Button 
               variant="contained" 
-              sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+              sx={{ 
+                color: colors.White,
+                backgroundColor:"#4758DC",
+                '&:hover': { backgroundColor:"#4758DC" }
+              }} 
               onClick={handleOpenModal}
             >
               Add Expense

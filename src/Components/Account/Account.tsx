@@ -4,14 +4,17 @@ import { TextField, Button } from '@mui/material';
 import './Account.css';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { doc, collection, addDoc, setDoc, getDoc, where, query, getDocs } from "firebase/firestore";
+import { doc, collection, setDoc, getDoc, where, query, getDocs } from "firebase/firestore";
 import validator from 'validator';
 import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
+import { useTheme } from '../Theme/ThemeContext';
+import colors from '../../colors';
 import GoogleIcon from '@mui/icons-material/Google';
-const Account: React.FC = () => {
-    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
 
+const Account: React.FC = () => {
+    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db } = useUserContext();
+    const { isDarkMode, setIsDarkMode } = useTheme();
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
     const [emailInvalidMessage, setEmailInvalidMessage] =useState<string>('');
@@ -77,6 +80,9 @@ const Account: React.FC = () => {
                             const userSettings = docSnapshot.data();
                             setCurrency(userSettings.currency);
                             setBudget(userSettings.budget);  
+                            if (userSettings.isDarkMode !== undefined) {
+                                setIsDarkMode(userSettings.isDarkMode)
+                            }
                         } else {
                             console.error("No matching user document found");
                         }
@@ -234,9 +240,34 @@ const Account: React.FC = () => {
     //sign-in form
     const signInForm = () : JSX.Element => (
         <div className="account-content">
-            <TextField required id="UserName" label="User Name" variant="outlined" value={userName} onChange={(e) => {setUserName(e.target.value)}}/>
-            <TextField required id="Email" label="Email" type="email" variant="outlined" value={email} onChange={(e) => {setEmail(e.target.value)}} onBlur={ () => validateEmail(email) } error={!isEmailValid} helperText={isEmailValid ? '' : `${emailInvalidMessage}`}/>
-            <TextField required id="Password" label="Password" type="password"variant="outlined" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+            <TextField 
+                required 
+                id="UserName" 
+                label="User Name" 
+                variant="outlined" 
+                value={userName} 
+                onChange={(e) => {setUserName(e.target.value)}}
+            />
+            <TextField 
+                required id="Email" 
+                label="Email" 
+                type="email" 
+                variant="outlined" 
+                value={email} 
+                onChange={(e) => {setEmail(e.target.value)}} 
+                onBlur={ () => validateEmail(email) } 
+                error={!isEmailValid} 
+                helperText={isEmailValid ? '' : `${emailInvalidMessage}`}
+            />
+            <TextField 
+                required 
+                id="Password" 
+                label="Password" 
+                type="password"
+                variant="outlined" 
+                value={password} 
+                onChange={(e) => {setPassword(e.target.value)}}
+            />
             {signInErrorMessage && (
                 <div className="error-message">
                     <IoAlertCircle style={{ width:'20px', height: '20px', color:'#E32327' }}/>
@@ -250,7 +281,11 @@ const Account: React.FC = () => {
                     size="small"
                     onClick={handleSignUp} 
                     disabled={!isAccountFormValid}
-                    sx={{ color:"#4758DC", border:"1px solid #4758DC", '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}}}
+                    sx={{ 
+                        color:colors.RoyalBlue, 
+                        border: `1px solid ${colors.RoyalBlue}`, 
+                        '&:hover': {color: colors.RoyalBlue, border:`1px solid ${colors.RoyalBlue}`}
+                    }}
                 >
                     Sign up
                 </Button>
@@ -259,7 +294,10 @@ const Account: React.FC = () => {
                     size="small"
                     onClick={handleSignIn} 
                     disabled={!isAccountFormValid}
-                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}}
+                    sx={{ 
+                        backgroundColor: colors.RoyalBlue,
+                        '&:hover': { backgroundColor: colors.RoyalBlue }
+                    }}
                 >
                     Log in
                 </Button>
@@ -267,8 +305,11 @@ const Account: React.FC = () => {
                     variant="contained"
                     size="small"
                     onClick={handleGmailSignIn} 
-                    startIcon={<GoogleIcon/>}
-                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}}
+                    startIcon={<GoogleIcon />}
+                    sx={{ 
+                        backgroundColor: colors.RoyalBlue, 
+                        '&:hover': {backgroundColor: colors.RoyalBlue}
+                    }}
                 >
                     Log in
                 </Button>
@@ -282,7 +323,11 @@ const Account: React.FC = () => {
     const userDetails = () : JSX.Element => (
         <div className="account-content">
             <div className="account-login-info">
-                <div className="account-login-info-name">{userName}</div>
+                <div className="account-login-info-name"
+                    style={{ color: isDarkMode ? colors.Gallery : colors.Black}}
+                >
+                    {userName}
+                </div>
                 <div className="account-login-info-email">{email}</div>
                 {/*<div>uid:{uid}</div>*/}
             </div>
@@ -291,7 +336,11 @@ const Account: React.FC = () => {
                 variant="outlined" 
                 size="small"
                 onClick={handleSignOut}
-                sx={{ color:"#4758DC", border:"1px solid #4758DC", '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}}}
+                sx={{ 
+                    color:"#4758DC", 
+                    border:"1px solid #4758DC", 
+                    '&:hover': {color:"#4758DC", border:"1px solid #4758DC"}
+                }}
             >
                 Log out
             </Button>

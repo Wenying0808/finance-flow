@@ -67,6 +67,7 @@ const CustomToggleButton: React.FC<ToggleButtonProps> = ({ view, onViewChange })
           display: 'flex',
           border: `1px solid #4758DC`,
           flexWrap: 'wrap',
+          backgroundColor: 'white',
         }}
       >
         <StyledToggleButtonGroup

@@ -10,9 +10,6 @@
     justify-content: center;
     align-items: center;
     gap: 40px;
-
-
-    border-top: 1px solid var(--RoyalBlue, #4758DC);
 }
 
 .navbar-tab{
@@ -20,10 +17,15 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
-
-    color: var(--Thundora, #404040);
-
     cursor: pointer;
+}
+
+.navbar-tab.lightmode {
+    color: var(--Black, #000000);
+}
+
+.navbar-tab.darkmode {
+    color: var(--Gallery, #EFEFEF);
 }
 
 span{

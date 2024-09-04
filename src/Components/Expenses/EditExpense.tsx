@@ -10,6 +10,8 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import dayjs from "dayjs";
 import { toDateObject, toDateString } from "./DateHandling";
 import { useUserContext } from "../../Contexts/UserContextProvider";
+import { useTheme } from "../Theme/ThemeContext";
+import colors from "../../colors";
 
 
 interface EditExpensePageProps {
@@ -22,7 +24,7 @@ interface EditExpensePageProps {
 const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCancel, onDeleteExpense }) => {
 
     const {currencySymbol, budget, uid,  userDocId, db, usersRef} = useUserContext();
-
+    const {isDarkMode} = useTheme();
     const [formData, setFormData] = useState<Expense>({
         id: expense ? expense.id : '',
         date: expense ? expense.date : toDateString(dayjs()),
@@ -61,9 +63,15 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
 
 
     return (
-        <div className="edit-expense-container">
+        <div className="edit-expense-container"
+            style={{ backgroundColor: isDarkMode ? colors.MineShaft : colors.White }}
+        >
             <div className="page-header">
-                <div className="page-header-title">Edit Expense</div>
+                <div className="page-header-title"
+                    style={{ color: isDarkMode ? colors.Gallery : colors.Black }}
+                >
+                    Edit Expense
+                </div>
                 <IconButton  sx={{ color:"#4758DC" ,'&:hover': {backgroundColor:"rgba(71, 88, 220, 0.1)" }}} onClick={onCancel}>
                     <IoIosCloseCircleOutline />
                 </IconButton>
@@ -129,7 +137,13 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
             <div className="edit-expense-buttons">
                 <Button 
                     variant="contained" 
-                    color="error" 
+                    sx={{
+                        backgroundColor: colors.PersianRed,
+                        '&:hover': { 
+                            color: colors.White, 
+                            backgroundColor: colors.PersianRed
+                        }
+                    }}
                     startIcon={<RiDeleteBinLine />} 
                     onClick={() => onDeleteExpense(formData.id)}
                 >
@@ -137,7 +151,14 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                 </Button>
                 <Button 
                     variant="outlined" 
-                    sx={{ color:"#4758DC", borderColor:"#4758DC", '&:hover': { color:"#4758DC", borderColor:"#4758DC"}}} 
+                    sx={{ 
+                        color: colors.RoyalBlue, 
+                        borderColor: colors.RoyalBlue, 
+                        '&:hover': { 
+                            color: colors.RoyalBlue, 
+                            borderColor: colors.RoyalBlue
+                        }
+                    }} 
                     onClick={onCancel}
                 >
                     Cancel
@@ -145,7 +166,10 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                 <Button 
                     variant="contained" 
                     type='submit' 
-                    sx={{ backgroundColor:"#4758DC",'&:hover': {backgroundColor:"#4758DC"}}} 
+                    sx={{ 
+                        backgroundColor: colors.RoyalBlue,
+                        '&:hover': {backgroundColor:colors.RoyalBlue}
+                    }} 
                     disabled ={!expense} 
                     onClick={handleSubmitForm}
                 >
