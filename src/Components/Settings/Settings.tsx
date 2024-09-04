@@ -14,8 +14,8 @@ import colors from '../../colors';
 const Settings: React.FC= () => {
   
   //access uid from context
-  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db, usersRef} = useUserContext();
-  const {isDarkMode, toggleTheme, setIsDarkMode} = useTheme();
+  const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db} = useUserContext();
+  const {isDarkMode, toggleTheme} = useTheme();
 
   const [newCurrency, setNewCurrency] = useState<string>(currency);
   const [newCurrencySymbol, setNewCurrencySymbol] = useState<string>(currencySymbol);

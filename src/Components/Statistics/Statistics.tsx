@@ -12,7 +12,7 @@ import AddExpensePage from '../Expenses/AddExpense';
 import EditExpensePage from '../Expenses/EditExpense';
 import MonthlyDataChart from '../DataChart/MonthlyDataChart';
 import dayjs, { Dayjs } from 'dayjs';
-import { toDateObject, toDateString, sortExpensesByDate } from "../Expenses/DateHandling";
+import { toDateObject, sortExpensesByDate } from "../Expenses/DateHandling";
 import { MdFastfood  } from "react-icons/md";
 import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
 import { FaBook } from "react-icons/fa6";
@@ -49,7 +49,7 @@ const categoryIconMap: CategoryIconMap = {
 const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   //access uid from context
-  const {currencySymbol, budget, uid, userDocId, db, usersRef} = useUserContext();
+  const { currencySymbol, budget, uid, db } = useUserContext();
   const { isDarkMode } = useTheme();
   const [selectedMonthAndYear, setSelectedMonthAndYear] = useState({month:dayjs().month(), year: dayjs().year()});
   const [isMonthMenuOpen, setMonthMenuOpen] = useState<boolean>(false);

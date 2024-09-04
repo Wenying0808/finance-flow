@@ -4,7 +4,7 @@ import { TextField, Button } from '@mui/material';
 import './Account.css';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { doc, collection, addDoc, setDoc, getDoc, where, query, getDocs } from "firebase/firestore";
+import { doc, collection, setDoc, getDoc, where, query, getDocs } from "firebase/firestore";
 import validator from 'validator';
 import { IoAlertCircle } from "react-icons/io5";
 import { useUserContext } from '../../Contexts/UserContextProvider';
@@ -13,7 +13,7 @@ import colors from '../../colors';
 import GoogleIcon from '@mui/icons-material/Google';
 
 const Account: React.FC = () => {
-    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
+    const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db } = useUserContext();
     const { isDarkMode, setIsDarkMode } = useTheme();
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
@@ -83,7 +83,6 @@ const Account: React.FC = () => {
                             if (userSettings.isDarkMode !== undefined) {
                                 setIsDarkMode(userSettings.isDarkMode)
                             }
-
                         } else {
                             console.error("No matching user document found");
                         }
