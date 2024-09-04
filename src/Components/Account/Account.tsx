@@ -14,7 +14,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 
 const Account: React.FC = () => {
     const { uid, setUid, userDocId, setUserDocId, currency, setCurrency, budget, setBudget, auth, db, usersRef } = useUserContext();
-    const { isDarkMode } = useTheme();
+    const { isDarkMode, setIsDarkMode } = useTheme();
     const [email, setEmail] = useState<string>('');
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
     const [emailInvalidMessage, setEmailInvalidMessage] =useState<string>('');
@@ -80,6 +80,10 @@ const Account: React.FC = () => {
                             const userSettings = docSnapshot.data();
                             setCurrency(userSettings.currency);
                             setBudget(userSettings.budget);  
+                            if (userSettings.isDarkMode !== undefined) {
+                                setIsDarkMode(userSettings.isDarkMode)
+                            }
+
                         } else {
                             console.error("No matching user document found");
                         }

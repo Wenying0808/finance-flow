@@ -41,6 +41,7 @@ interface UserContextType {
 }
 
 const UserContext = createContext<any>(null);
+
 export const useUserContext = () => useContext(UserContext);
 
 const UserContextProvider: React.FC<UserContextProps> = ({ children }) => {

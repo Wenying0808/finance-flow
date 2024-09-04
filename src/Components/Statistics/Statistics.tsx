@@ -264,7 +264,6 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
 
   }, [expenses, budget, formattedSelectedMonthAndYear]);
 
-  
   return (
     <>
       <div className="month-year-control"
@@ -369,7 +368,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             >
               Budget: 
             </div>
-            <div className="summary-info-value budget">{currencySymbol}{budget}</div>
+            <div className="summary-info-value budget" style={{ color: colors.RoyalBlue }}>{currencySymbol}{budget}</div>
           </div>
           <div className="summary-info">
             <div className="summary-info-header"
@@ -377,7 +376,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             >
               Monthly Expense: 
             </div>
-            <div className="summary-info-value expense">{currencySymbol}{monthlyTotalExpense}</div>
+            <div className="summary-info-value expense" style={{ color: colors.Lavender }}>{currencySymbol}{monthlyTotalExpense}</div>
           </div>
           <div className="summary-info">
             <div className="summary-info-header"
@@ -385,7 +384,7 @@ const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
             >
               Monthly Balance: 
             </div>
-            <div className="summary-info-value balance">{currencySymbol}{monthlyBalance}</div>
+            <div className="summary-info-value balance" style={{ color: colors.Salem }}>{currencySymbol}{monthlyBalance}</div>
           </div>
           <div className="data-view-control">
             <CustomToggleButton view={viewMode} onViewChange={handleViewModeChange}/>

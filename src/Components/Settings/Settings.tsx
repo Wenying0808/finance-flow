@@ -15,7 +15,7 @@ const Settings: React.FC= () => {
   
   //access uid from context
   const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db, usersRef} = useUserContext();
-  const {isDarkMode, toggleTheme} = useTheme();
+  const {isDarkMode, toggleTheme, setIsDarkMode} = useTheme();
 
   const [newCurrency, setNewCurrency] = useState<string>(currency);
   const [newCurrencySymbol, setNewCurrencySymbol] = useState<string>(currencySymbol);
@@ -41,7 +41,12 @@ const Settings: React.FC= () => {
     //store to firestore
     try {
       const userDocRef = doc(db, "Users", userDocId);
-      await setDoc(userDocRef, {currency: newCurrency, budget: newBudget, uid: uid});
+      await setDoc(userDocRef, {
+        currency: newCurrency, 
+        budget: newBudget, 
+        uid: uid,
+        isDarkMode: isDarkMode,
+      });
 
       setCurrency(newCurrency);
       setBudget(newBudget);
