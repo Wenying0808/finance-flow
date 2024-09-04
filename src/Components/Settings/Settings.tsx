@@ -113,9 +113,8 @@ const Settings: React.FC= () => {
       <Button 
         variant="contained" 
         sx={{ 
-          color: colors.White,
-          backgroundColor:"#4758DC",
-          '&:hover': {backgroundColor:"#4758DC"}
+          backgroundColor:colors.RoyalBlue,
+          '&:hover': {backgroundColor:colors.RoyalBlue}
         }} 
         onClick={handleSave}
       >

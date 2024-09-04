@@ -138,7 +138,6 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                 <Button 
                     variant="contained" 
                     sx={{
-                        color: colors.White,
                         backgroundColor: colors.PersianRed,
                         '&:hover': { 
                             color: colors.White, 
@@ -168,7 +167,6 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                     variant="contained" 
                     type='submit' 
                     sx={{ 
-                        color: colors.White,
                         backgroundColor: colors.RoyalBlue,
                         '&:hover': {backgroundColor:colors.RoyalBlue}
                     }} 

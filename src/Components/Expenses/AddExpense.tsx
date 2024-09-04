@@ -164,7 +164,6 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
                 <Button 
                     variant="contained" 
                     sx={{ 
-                        color: colors.White,
                         backgroundColor:colors.RoyalBlue,
                         '&:hover': {
                             backgroundColor:colors.RoyalBlue}

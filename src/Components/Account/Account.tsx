@@ -282,7 +282,7 @@ const Account: React.FC = () => {
                     onClick={handleSignUp} 
                     disabled={!isAccountFormValid}
                     sx={{ 
-                        color:"#4758DC", 
+                        color:colors.RoyalBlue, 
                         border: `1px solid ${colors.RoyalBlue}`, 
                         '&:hover': {color: colors.RoyalBlue, border:`1px solid ${colors.RoyalBlue}`}
                     }}
@@ -295,7 +295,6 @@ const Account: React.FC = () => {
                     onClick={handleSignIn} 
                     disabled={!isAccountFormValid}
                     sx={{ 
-                        color: colors.White,
                         backgroundColor: colors.RoyalBlue,
                         '&:hover': { backgroundColor: colors.RoyalBlue }
                     }}
@@ -308,7 +307,6 @@ const Account: React.FC = () => {
                     onClick={handleGmailSignIn} 
                     startIcon={<GoogleIcon />}
                     sx={{ 
-                        color: colors.White,
                         backgroundColor: colors.RoyalBlue, 
                         '&:hover': {backgroundColor: colors.RoyalBlue}
                     }}

@@ -15,7 +15,7 @@ export const lightTheme: Theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          color: '#000000',
+          color: colors.White,
         },
       },
     },
@@ -36,7 +36,7 @@ export const darkTheme: Theme = createTheme({
       MuiButton: {
         styleOverrides: {
           root: {
-            color: '#ffffff',
+            color: colors.White,
           },
         },
       },
