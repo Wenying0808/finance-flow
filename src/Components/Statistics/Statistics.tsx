@@ -13,9 +13,10 @@ import EditExpensePage from '../Expenses/EditExpense';
 import MonthlyDataChart from '../DataChart/MonthlyDataChart';
 import dayjs, { Dayjs } from 'dayjs';
 import { toDateObject, sortExpensesByDate } from "../Expenses/DateHandling";
-import { MdFastfood  } from "react-icons/md";
-import { FaHeart, FaHome, FaShoppingBasket, FaTrain } from "react-icons/fa";
+import { FaHeart, FaHome, FaShoppingBasket } from "react-icons/fa";
 import { FaBook } from "react-icons/fa6";
+import { FaBowlRice } from "react-icons/fa6";
+import { MdTrain } from "react-icons/md";
 import { IoGameController } from "react-icons/io5";
 import { BsSuitcaseFill } from "react-icons/bs";
 import { IconType } from 'react-icons';
@@ -38,12 +39,12 @@ interface CategoryIconMap {
 const categoryIconMap: CategoryIconMap = {
   'Education': FaBook,
   'Entertainment': IoGameController,
-  'Food & Drinks': MdFastfood,
+  'Food & Drinks': FaBowlRice,
   'Health & Care': FaHeart,
   'Holidays': BsSuitcaseFill,
   'Home & Utilities': FaHome,
   'Shopping': FaShoppingBasket,
-  'Transportation': FaTrain,
+  'Transportation': MdTrain,
 };
 
 const Statistics: React.FC<StatisticsProps> = ({ onDeleteExpense }) => {
