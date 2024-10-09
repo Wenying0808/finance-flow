@@ -96,6 +96,13 @@ const EditExpensePage: React.FC<EditExpensePageProps> = ({ expense, onSave, onCa
                         value={formData.category}
                         onChange={handleCategoryChange}
                         required
+                        MenuProps={{
+                            PaperProps: {
+                              style: {
+                                maxHeight: 240, 
+                              },
+                            },
+                        }}
                     >
                         {Categories.map((option)=>{
                             return (

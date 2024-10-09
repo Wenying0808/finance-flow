@@ -64,8 +64,6 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
         setIsSaveEnabled(isInputValid);
     },[isInputValid]);
 
-   
-
     const handleSave = () => {
         const newExpense: Expense = {
             id: uuidv4(),
@@ -112,6 +110,13 @@ const AddExpensePage: React.FC<AddExpensePageProps> = ({onSave, onCancel }) => {
                         value={category}
                         onChange={handleCategoryChange}
                         required
+                        MenuProps={{
+                            PaperProps: {
+                              style: {
+                                maxHeight: 240,
+                              },
+                            },
+                          }}
                     >
                         {Categories.map((option)=>{
                             return (

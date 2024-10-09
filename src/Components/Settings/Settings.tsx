@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import './Settings.css';
-import { TextField, Select, InputLabel, FormControl, MenuItem, InputAdornment, Button, Snackbar, Alert} from '@mui/material';
+import { TextField, FormControl, InputAdornment, Button, Snackbar, Alert} from '@mui/material';
+import Select from '@mui/material/Select';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import { CustomSwitch } from '../Switch/customSwitch';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Currencies } from '../Expenses/Currencies';
@@ -16,7 +19,6 @@ const Settings: React.FC= () => {
   //access uid from context
   const {uid, userDocId, currency, setCurrency, budget, setBudget, currencySymbol, db} = useUserContext();
   const {isDarkMode, toggleTheme} = useTheme();
-
   const [newCurrency, setNewCurrency] = useState<string>(currency);
   const [newCurrencySymbol, setNewCurrencySymbol] = useState<string>(currencySymbol);
   const [newBudget, setNewBudget] = useState<number>(budget);
@@ -78,13 +80,19 @@ const Settings: React.FC= () => {
           id="currency" 
           value={newCurrency} 
           onChange={handleCurrencyChange} 
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 240, 
+              },
+            },
+          }}
         >
           {Currencies.map((currencyOption) => (
             <MenuItem key={currencyOption.value} value={currencyOption.value}>{currencyOption.label}</MenuItem>
           ))}
         </Select>
       </FormControl>
-     
 
       <TextField 
         sx={{ width: '180px' }} 
@@ -121,7 +129,7 @@ const Settings: React.FC= () => {
           Save
       </Button>
       
-      {/*<div>uid:{uid}</div>*/}
+      {/*test if uid is shared across page <div>uid:{uid}</div>*/}
       <Snackbar
         open={openAlert}
         autoHideDuration={5000}
@@ -130,7 +138,7 @@ const Settings: React.FC= () => {
       >
         {alertSeverity === "success" 
         ? <Alert severity="success" onClose={handleAlertClose}>Settings saved successfully!</Alert>
-        : <Alert severity="error" >Error saving settings. Please try again.</Alert>
+        : <Alert severity="error">Error saving settings. Please try again.</Alert>
         }
       </Snackbar>
       
